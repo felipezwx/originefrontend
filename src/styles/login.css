@@ -551,6 +551,28 @@
 
         }
 
+        #root {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .mensagem-erro {
+        color: #ff4d4d;
+        font-size: 14px;
+        margin: 10px 0;
+        text-align: center;
+        }
+
+        .mensagem-sucesso {
+        color: #28a745;
+        font-size: 14px;
+        margin: 10px 0;
+        text-align: center;
+        }
+
+
+
 
         /* =====================================================
            RESPONSIVIDADE
@@ -582,9 +604,3 @@
             }
 
         }
-
-        #root {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            }

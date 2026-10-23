@@ -1,80 +1,131 @@
-
+import { useState } from "react";
+import { validarEmail } from "../utils/validacoes";
 import "../styles/login.css";
 
 export function Login() {
-  return (
-    <main className="container-login">
-      <div className="cartao-login">
-        <div className="logo-login">
-          <img src="/imagens/logo.png" alt="Originie Audiovisual" />
-        </div>
 
-        <div className="icone-login">
-          <i className="bi bi-person-circle"></i>
-        </div>
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const [erro, setErro] = useState("");
+    const [validado, setValidado] = useState(false);
 
-        <h1 className="titulo-login">Bem-vindo</h1>
+    function handleLogin() {
+        setErro("");
+        setValidado(false);
 
-        <p className="subtitulo-login">
-          Entre para acessar a Originie
-        </p>
+        if(email.trim() === "") {
+            setErro("Por favor, informe seu e-mail.");
+            return;
+        }
 
-        <form onSubmit={(event) => event.preventDefault()}>
-          <div className="grupo-formulario">
-            <label htmlFor="campoEmail">
-              <i className="bi bi-envelope me-1"></i> Email
-            </label>
+        if(!validarEmail(email)) {
+            setErro("Digite um e-mail válido.");
+            return;
+        }
 
-            <input
-              type="email"
-              id="campoEmail"
-              name="email"
-              className="entrada-login"
-              placeholder="seu@email.com"
-              required
-            />
-          </div>
+        if(senha.trim() === "") {
+            setErro("Por favor, informe sua senha.");
+            return;
+        }
 
-          <div className="grupo-formulario">
-            <label htmlFor="campoSenha">
-              <i className="bi bi-key me-1"></i> Senha
-            </label>
+        setValidado(true);
+    }
 
-            <input
-              type="password"
-              id="campoSenha"
-              name="senha"
-              className="entrada-login"
-              placeholder="Sua senha"
-              required
-            />
-          </div>
+    return (
+        <main className="container-login">
+            <div className="cartao-login">
+                <div className="logo-login">
+                    <img src="/imagens/logo.png" alt="Originie Audiovisual" />
+                </div>
 
-          <button type="submit" className="botao-entrar">
-            <i className="bi bi-box-arrow-in-right me-2"></i>
-            Entrar
-          </button>
-        </form>
+                <div className="icone-login">
+                    <i className="bi bi-person-circle"></i>
+                </div>
 
-        <div className="divisor">ou</div>
+                <h1 className="titulo-login">Bem-vindo</h1>
 
-        <div className="area-cadastro">
-          <p className="texto-cadastro">
-            Ainda não possui uma conta?
-          </p>
+                <p className="subtitulo-login">
+                    Entre para acessar a Originie
+                </p>
 
-          <a href="/cadastro" className="botao-secundario">
-            <i className="bi bi-person-plus me-2"></i>
-            Criar uma conta
-          </a>
-        </div>
+                <form noValidate onSubmit={(event) =>  { event.preventDefault(); handleLogin(); }}>
+                    <div className="grupo-formulario">
+                        <label htmlFor="campoEmail">
+                            <i className="bi bi-envelope me-1"></i> Email
+                        </label>
 
-        <div className="dica-login">
-          <i className="bi bi-info-circle me-2"></i>
-          <strong>Acesso seguro</strong>
-          <p>Entre com seu email e senha cadastrados para acessar o site.</p>
-        </div>
-      </div>
-    </main>
-  );
+                        <input
+                            type="email"
+                            id="campoEmail"
+                            name="email"
+                            className="entrada-login"
+                            placeholder="seu@email.com"
+                            value={email}
+                            onChange={(event) => {
+                                setEmail(event.target.value);
+                                setErro("");
+                                setValidado(false);
+                            }}
+                        />
+                    </div>
+
+                    <div className="grupo-formulario">
+                        <label htmlFor="campoSenha">
+                            <i className="bi bi-key me-1"></i> Senha
+                        </label>
+
+                        <input
+                            type="password"
+                            id="campoSenha"
+                            name="senha"
+                            className="entrada-login"
+                            placeholder="Sua senha"
+                            value={senha}
+                            onChange={(event) => {
+                                setSenha(event.target.value);
+                                setErro("");
+                                setValidado(false);
+                            }}
+                        />
+                    </div>
+
+                    {erro && (
+                        <p className="mensagem-erro" role="alert">
+                            {erro}
+                        </p>
+                    )}
+
+                    {validado && (
+                        <p className="Mensagem-sucesso" role="status">
+                            Campos validados! Falta conectar à API.
+                        </p>
+                    )}
+
+                    <button type="submit" className="botao-entrar">
+                        <i className="bi bi-box-arrow-in-right me-2"></i>
+                        Entrar
+                    </button>
+                </form>
+
+                <div className="divisor">ou</div>
+
+                <div className="area-cadastro">
+                    <p className="texto-cadastro">
+                        Ainda não possui uma conta?
+                    </p>
+
+                    <a href="/cadastro" className="botao-secundario">
+                        <i className="bi bi-person-plus me-2"></i>
+                        Criar uma conta
+                    </a>
+                </div>
+
+                <div className="dica-login">
+                    <i className="bi bi-info-circle me-2"></i>
+                    <strong>Acesso seguro</strong>
+                    <p>Entre com seu email e senha cadastrados para acessar o site.</p>
+                </div>
+            </div>
+        </main>
+    );
 }
