@@ -1,0 +1,490 @@
+:root {
+
+            --vermelho: #CC2A1A;
+
+            --fundo: #111111;
+
+            --fundo-2: #181818;
+
+            --branco: #FFFFFF;
+
+            --silencioso: #777777;
+
+            --borda: rgba(255,255,255,0.08);
+
+            --verde: #28a745;
+
+        }
+
+
+        * {
+
+            box-sizing: border-box;
+
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: 'Inter', sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--fundo) 0%,
+                    var(--fundo-2) 100%
+                );
+
+            color: var(--branco);
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 30px 15px;
+
+        }
+
+
+        /* =====================================================
+           CONTAINER
+        ====================================================== */
+
+        .container-cadastro {
+
+            width: 100%;
+
+            max-width: 460px;
+
+        }
+
+
+        /* =====================================================
+           CARTÃO
+        ====================================================== */
+
+        .cartao-cadastro {
+
+            background: var(--fundo-2);
+
+            border:
+                1px solid var(--borda);
+
+            border-radius: 8px;
+
+            padding: 40px 30px;
+
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.5);
+
+        }
+
+
+        /* =====================================================
+           LOGO
+        ====================================================== */
+
+        .logo-cadastro {
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .logo-cadastro img {
+
+            height: 50px;
+
+            max-width: 100%;
+
+            object-fit: contain;
+
+        }
+
+
+        /* =====================================================
+           ÍCONE
+        ====================================================== */
+
+        .icone-cadastro {
+
+            font-size: 46px;
+
+            color: var(--vermelho);
+
+            text-align: center;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        /* =====================================================
+           TÍTULO
+        ====================================================== */
+
+        .titulo-cadastro {
+
+            font-family:
+                'Bebas Neue',
+                sans-serif;
+
+            font-size: 32px;
+
+            text-align: center;
+
+            margin-bottom: 8px;
+
+            color: var(--branco);
+
+        }
+
+
+        .subtitulo-cadastro {
+
+            font-size: 13px;
+
+            text-align: center;
+
+            color: var(--silencioso);
+
+            margin-bottom: 30px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        /* =====================================================
+           FORMULÁRIO
+        ====================================================== */
+
+        .grupo-formulario {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .grupo-formulario label {
+
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            margin-bottom: 8px;
+
+            color: var(--branco);
+
+            text-transform: uppercase;
+
+            letter-spacing: .5px;
+
+        }
+
+
+        .entrada-cadastro {
+
+            width: 100%;
+
+            background:
+                rgba(255,255,255,.05);
+
+            border:
+                1px solid var(--borda);
+
+            color: var(--branco);
+
+            padding: 12px 15px;
+
+            border-radius: 4px;
+
+            font-family:
+                'Inter',
+                sans-serif;
+
+            font-size: 14px;
+
+            transition: .2s;
+
+        }
+
+
+        .entrada-cadastro:focus {
+
+            outline: none;
+
+            border-color:
+                var(--vermelho);
+
+            background:
+                rgba(204,42,26,.1);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(204,42,26,.1);
+
+        }
+
+
+        .entrada-cadastro::placeholder {
+
+            color:
+                rgba(255,255,255,.4);
+
+        }
+
+
+        /* =====================================================
+           BOTÃO
+        ====================================================== */
+
+        .botao-cadastro {
+
+            width: 100%;
+
+            background:
+                var(--vermelho);
+
+            color:
+                var(--branco);
+
+            border: none;
+
+            padding: 12px 20px;
+
+            border-radius: 4px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            transition: .2s;
+
+            margin-top: 5px;
+
+        }
+
+
+        .botao-cadastro:hover {
+
+            background:
+                #a82014;
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        .botao-cadastro:active {
+
+            transform:
+                translateY(0);
+
+        }
+
+
+        /* =====================================================
+           ERRO
+        ====================================================== */
+
+        .alerta-erro {
+
+            background:
+                rgba(244,67,54,.15);
+
+            border:
+                1px solid #F44336;
+
+            color:
+                #F44336;
+
+            padding:
+                12px 15px;
+
+            border-radius:
+                4px;
+
+            margin-bottom:
+                20px;
+
+            font-size:
+                14px;
+
+        }
+
+
+        /* =====================================================
+           SUCESSO
+        ====================================================== */
+
+        .alerta-sucesso {
+
+            background:
+                rgba(40,167,69,.15);
+
+            border:
+                1px solid var(--verde);
+
+            color:
+                #5bd879;
+
+            padding:
+                12px 15px;
+
+            border-radius:
+                4px;
+
+            margin-bottom:
+                20px;
+
+            font-size:
+                14px;
+
+        }
+
+
+        /* =====================================================
+           LOGIN
+        ====================================================== */
+
+        .link-login {
+
+            text-align:
+                center;
+
+            margin-top:
+                25px;
+
+            padding-top:
+                20px;
+
+            border-top:
+                1px solid var(--borda);
+
+        }
+
+
+        .link-login p {
+
+            margin:
+                0 0 8px;
+
+            font-size:
+                12px;
+
+            color:
+                var(--silencioso);
+
+        }
+
+
+        .link-login a {
+
+            color:
+                var(--vermelho);
+
+            text-decoration:
+                none;
+
+            font-size:
+                13px;
+
+            font-weight:
+                600;
+
+            transition:
+                .2s;
+
+        }
+
+
+        .link-login a:hover {
+
+            color:
+                var(--branco);
+
+        }
+
+
+        /* =====================================================
+           VOLTAR
+        ====================================================== */
+
+        .link-voltar {
+
+            text-align:
+                center;
+
+            margin-top:
+                15px;
+
+        }
+
+
+        .link-voltar a {
+
+            color:
+                var(--silencioso);
+
+            text-decoration:
+                none;
+
+            font-size:
+                12px;
+
+            transition:
+                .2s;
+
+        }
+
+
+        .link-voltar a:hover {
+
+            color:
+                var(--vermelho);
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVIDADE
+        ====================================================== */
+
+        @media (max-width: 480px) {
+
+            .cartao-cadastro {
+
+                padding:
+                    30px 20px;
+
+            }
+
+
+            .titulo-cadastro {
+
+                font-size:
+                    28px;
+
+            }
+
+        }

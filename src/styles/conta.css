@@ -1,0 +1,898 @@
+:root {
+
+            --vermelho: #CC2A1A;
+
+            --vermelho-hover: #a82014;
+
+            --fundo: #111111;
+
+            --fundo-2: #181818;
+
+            --fundo-3: #202020;
+
+            --branco: #FFFFFF;
+
+            --cinza: #AAAAAA;
+
+            --silencioso: #777777;
+
+            --borda: rgba(255,255,255,0.08);
+
+            --verde: #28a745;
+
+            --amarelo: #ffc107;
+
+        }
+
+
+        * {
+
+            box-sizing: border-box;
+
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: 'Inter', sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--fundo) 0%,
+                    var(--fundo-2) 100%
+                );
+
+            color: var(--branco);
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ====================================================== */
+
+        .navbar-conta {
+
+            background:
+                rgba(17,17,17,.96);
+
+            border-bottom:
+                1px solid var(--borda);
+
+            padding:
+                15px 0;
+
+        }
+
+
+        .logo {
+
+            font-family:
+                'Bebas Neue',
+                sans-serif;
+
+            font-size:
+                30px;
+
+            color:
+                var(--branco);
+
+            text-decoration:
+                none;
+
+            letter-spacing:
+                1px;
+
+        }
+
+
+        .logo span {
+
+            color:
+                var(--vermelho);
+
+        }
+
+
+        .menu-direita {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                15px;
+
+        }
+
+
+        .nome-navbar {
+
+            color:
+                var(--cinza);
+
+            font-size:
+                13px;
+
+        }
+
+
+        .botao-sair {
+
+            color:
+                var(--branco);
+
+            border:
+                1px solid var(--borda);
+
+            padding:
+                8px 14px;
+
+            border-radius:
+                4px;
+
+            text-decoration:
+                none;
+
+            font-size:
+                12px;
+
+            transition:
+                .2s;
+
+        }
+
+
+        .botao-sair:hover {
+
+            border-color:
+                var(--vermelho);
+
+            color:
+                var(--vermelho);
+
+        }
+
+
+        /* =====================================================
+           CONTAINER
+        ====================================================== */
+
+        .container-conta {
+
+            max-width:
+                1100px;
+
+            margin:
+                0 auto;
+
+            padding:
+                50px 20px;
+
+        }
+
+
+        /* =====================================================
+           CABEÇALHO
+        ====================================================== */
+
+        .cabecalho-conta {
+
+            margin-bottom:
+                35px;
+
+        }
+
+
+        .cabecalho-conta h1 {
+
+            font-family:
+                'Bebas Neue',
+                sans-serif;
+
+            font-size:
+                42px;
+
+            margin:
+                0 0 5px;
+
+        }
+
+
+        .cabecalho-conta h1 span {
+
+            color:
+                var(--vermelho);
+
+        }
+
+
+        .cabecalho-conta p {
+
+            margin:
+                0;
+
+            color:
+                var(--silencioso);
+
+            font-size:
+                14px;
+
+        }
+
+
+        /* =====================================================
+           CARDS DE RESUMO
+        ====================================================== */
+
+        .resumo-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap:
+                20px;
+
+            margin-bottom:
+                30px;
+
+        }
+
+
+        .resumo-card {
+
+            background:
+                var(--fundo-2);
+
+            border:
+                1px solid var(--borda);
+
+            border-radius:
+                6px;
+
+            padding:
+                22px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                18px;
+
+        }
+
+
+        .resumo-icone {
+
+            width:
+                48px;
+
+            height:
+                48px;
+
+            border-radius:
+                6px;
+
+            background:
+                rgba(204,42,26,.12);
+
+            color:
+                var(--vermelho);
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                21px;
+
+        }
+
+
+        .resumo-info {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+        }
+
+
+        .resumo-numero {
+
+            font-size:
+                24px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .resumo-label {
+
+            color:
+                var(--silencioso);
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* =====================================================
+           GRID PRINCIPAL
+        ====================================================== */
+
+        .grid-conta {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                330px 1fr;
+
+            gap:
+                25px;
+
+        }
+
+
+        /* =====================================================
+           CARD
+        ====================================================== */
+
+        .card-conta {
+
+            background:
+                var(--fundo-2);
+
+            border:
+                1px solid var(--borda);
+
+            border-radius:
+                6px;
+
+            overflow:
+                hidden;
+
+        }
+
+
+        .card-titulo {
+
+            padding:
+                20px 22px;
+
+            border-bottom:
+                1px solid var(--borda);
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
+
+        }
+
+
+        .card-titulo h2 {
+
+            font-family:
+                'Bebas Neue',
+                sans-serif;
+
+            font-size:
+                24px;
+
+            margin:
+                0;
+
+            letter-spacing:
+                .5px;
+
+        }
+
+
+        .card-titulo i {
+
+            color:
+                var(--vermelho);
+
+        }
+
+
+        .card-conteudo {
+
+            padding:
+                22px;
+
+        }
+
+
+        /* =====================================================
+           PERFIL
+        ====================================================== */
+
+        .avatar {
+
+            width:
+                75px;
+
+            height:
+                75px;
+
+            margin:
+                0 auto 20px;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(204,42,26,.12);
+
+            border:
+                1px solid rgba(204,42,26,.35);
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            color:
+                var(--vermelho);
+
+            font-size:
+                30px;
+
+        }
+
+
+        .perfil-nome {
+
+            text-align:
+                center;
+
+            font-size:
+                18px;
+
+            font-weight:
+                600;
+
+            margin-bottom:
+                4px;
+
+        }
+
+
+        .perfil-tipo {
+
+            text-align:
+                center;
+
+            color:
+                var(--silencioso);
+
+            font-size:
+                11px;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1px;
+
+            margin-bottom:
+                25px;
+
+        }
+
+
+        .informacao {
+
+            padding:
+                14px 0;
+
+            border-bottom:
+                1px solid var(--borda);
+
+        }
+
+
+        .informacao:last-child {
+
+            border-bottom:
+                none;
+
+        }
+
+
+        .informacao-label {
+
+            display:
+                block;
+
+            color:
+                var(--silencioso);
+
+            font-size:
+                11px;
+
+            text-transform:
+                uppercase;
+
+            margin-bottom:
+                4px;
+
+        }
+
+
+        .informacao-valor {
+
+            font-size:
+                13px;
+
+            color:
+                var(--branco);
+
+            word-break:
+                break-word;
+
+        }
+
+
+        /* =====================================================
+           ORÇAMENTOS
+        ====================================================== */
+
+        .orcamento {
+
+            padding:
+                20px 22px;
+
+            border-bottom:
+                1px solid var(--borda);
+
+        }
+
+
+        .orcamento:last-child {
+
+            border-bottom:
+                none;
+
+        }
+
+
+        .orcamento-topo {
+
+            display:
+                flex;
+
+            align-items:
+                flex-start;
+
+            justify-content:
+                space-between;
+
+            gap:
+                15px;
+
+            margin-bottom:
+                12px;
+
+        }
+
+
+        .orcamento-titulo {
+
+            font-size:
+                15px;
+
+            font-weight:
+                600;
+
+        }
+
+
+        .orcamento-data {
+
+            color:
+                var(--silencioso);
+
+            font-size:
+                11px;
+
+            margin-top:
+                4px;
+
+        }
+
+
+        /* =====================================================
+           STATUS
+        ====================================================== */
+
+        .status {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                5px;
+
+            padding:
+                5px 9px;
+
+            border-radius:
+                20px;
+
+            font-size:
+                10px;
+
+            font-weight:
+                600;
+
+            white-space:
+                nowrap;
+
+        }
+
+
+        .status-pendente {
+
+            background:
+                rgba(255,193,7,.12);
+
+            color:
+                #ffc107;
+
+        }
+
+
+        .status-concluido {
+
+            background:
+                rgba(40,167,69,.12);
+
+            color:
+                #5bd879;
+
+        }
+
+
+        .orcamento-mensagem {
+
+            color:
+                var(--cinza);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.6;
+
+            margin:
+                0;
+
+        }
+
+
+        .orcamento-servico {
+
+            margin-top:
+                12px;
+
+            font-size:
+                12px;
+
+            color:
+                var(--silencioso);
+
+        }
+
+
+        .orcamento-servico strong {
+
+            color:
+                var(--cinza);
+
+        }
+
+
+        /* =====================================================
+           SEM ORÇAMENTOS
+        ====================================================== */
+
+        .sem-orcamentos {
+
+            padding:
+                50px 25px;
+
+            text-align:
+                center;
+
+        }
+
+
+        .sem-orcamentos i {
+
+            font-size:
+                45px;
+
+            color:
+                var(--silencioso);
+
+            display:
+                block;
+
+            margin-bottom:
+                15px;
+
+        }
+
+
+        .sem-orcamentos h3 {
+
+            font-family:
+                'Bebas Neue',
+                sans-serif;
+
+            font-size:
+                25px;
+
+            margin-bottom:
+                8px;
+
+        }
+
+
+        .sem-orcamentos p {
+
+            color:
+                var(--silencioso);
+
+            font-size:
+                13px;
+
+            margin-bottom:
+                20px;
+
+        }
+
+
+        .botao-servicos {
+
+            display:
+                inline-block;
+
+            background:
+                var(--vermelho);
+
+            color:
+                var(--branco);
+
+            padding:
+                10px 18px;
+
+            border-radius:
+                4px;
+
+            text-decoration:
+                none;
+
+            font-size:
+                12px;
+
+            font-weight:
+                600;
+
+            transition:
+                .2s;
+
+        }
+
+
+        .botao-servicos:hover {
+
+            background:
+                var(--vermelho-hover);
+
+            color:
+                var(--branco);
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVIDADE
+        ====================================================== */
+
+        @media (max-width: 900px) {
+
+            .grid-conta {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .resumo-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .container-conta {
+
+                padding:
+                    35px 15px;
+
+            }
+
+
+            .cabecalho-conta h1 {
+
+                font-size:
+                    35px;
+
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .nome-navbar {
+
+                display:
+                    none;
+
+            }
+
+
+            .orcamento-topo {
+
+                flex-direction:
+                    column;
+
+            }
+
+        }
