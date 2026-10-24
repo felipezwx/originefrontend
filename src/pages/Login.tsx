@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { validarEmail } from "../utils/validacoes";
+import { Link } from "react-router-dom";
 import "../styles/login.css";
 
 export function Login() {
@@ -96,7 +97,7 @@ export function Login() {
                     )}
 
                     {validado && (
-                        <p className="Mensagem-sucesso" role="status">
+                        <p className="mensagem-sucesso" role="status">
                             Campos validados! Falta conectar à API.
                         </p>
                     )}
@@ -114,10 +115,10 @@ export function Login() {
                         Ainda não possui uma conta?
                     </p>
 
-                    <a href="/cadastro" className="botao-secundario">
+                    <Link to="/cadastro" className="botao-secundario">
                         <i className="bi bi-person-plus me-2"></i>
                         Criar uma conta
-                    </a>
+                    </Link>
                 </div>
 
                 <div className="dica-login">

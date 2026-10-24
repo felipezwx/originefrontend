@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { validarEmail, validarCPF, validarSenha, formatarCPF } from "../utils/validacoes";
+import { Link } from "react-router-dom";
 import "../styles/cadastro.css";
 
 export function Cadastro() {
@@ -181,10 +182,10 @@ export function Cadastro() {
 
                 <div className="link-login">
                 <p>Já possui uma conta?</p>
-                <a href="/">
+                <Link to="/login">
                     <i className="bi bi-box-arrow-in-right me-1"></i>
                     Entrar na minha conta
-                </a>
+                </Link>
                 </div>
 
             </div>
