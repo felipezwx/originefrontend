@@ -36,3 +36,19 @@ export function validarCPF(cpf: string): boolean {
 
     return true;
 }
+
+export function validarSenha(senha: string): boolean {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+    return regex.test(senha);
+}
+
+
+export function formatarCPF(cpf: string): string {
+    const numeros = cpf.replace(/\D/g, "").slice(0, 11);
+
+    return numeros
+        .replace(/^(\d{3})(\d)/, "$1.$2")
+        .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+        .replace(/\.(\d{3})(\d)/, ".$1-$2");
+}

@@ -1,6 +1,50 @@
+import { useState } from "react";
+import { validarEmail, validarCPF, validarSenha, formatarCPF } from "../utils/validacoes";
 import "../styles/cadastro.css";
 
 export function Cadastro() {
+
+    const [nome, setNome] = useState("");
+    const [email, setEmail] = useState("");
+    const [cpf, setCpf] = useState("");
+    const [senha, setSenha] = useState("");
+    const [confirmarSenha, setConfirmarSenha] = useState("");
+
+    const [erro, setErro] = useState("");
+    const [validado, setValidado] = useState(false);
+
+    function handleCadastro() {
+        setErro("");
+        setValidado(false);
+
+        if (nome.trim() === "") {
+            setErro("Por favor, informe seu nome.");
+            return;
+        }
+
+        if (!validarEmail(email)) {
+            setErro("Digite um e-mail válido.");
+            return;
+        }
+
+        if (!validarCPF(cpf)) {
+            setErro("Digite um CPF válido.");
+            return;
+        }
+
+        if (!validarSenha(senha)) {
+            setErro("A senha deve ter no mínimo 8 caracteres, incluindo letra maiúscula, minúscula, número e caractere especial.");
+            return;
+        }
+
+        if (senha !== confirmarSenha) {
+            setErro("As senhas não coincidem.");
+            return;
+        }
+
+        setValidado(true);
+    }
+
     return (
         <main className="container-cadastro">
             <div className="cartao-cadastro">
@@ -19,7 +63,7 @@ export function Cadastro() {
                     Faça seu cadastro na Originie
                 </p>
 
-                <form onSubmit={(event) => event.preventDefault()}>
+                <form noValidate onSubmit={(event) => { event.preventDefault(); handleCadastro(); }}>
 
                     <div className="grupo-formulario">
                         <label htmlFor="campoNome">
@@ -32,7 +76,11 @@ export function Cadastro() {
                             className="entrada-cadastro"
                             placeholder="Seu nome completo"
                             maxLength={100}
-                            required
+                            value={nome}
+                            onChange={(event) => {
+                                setNome(event.target.value);
+                                setValidado(false);
+                            }}
                         />
                     </div>
 
@@ -46,7 +94,11 @@ export function Cadastro() {
                             name="email"
                             className="entrada-cadastro"
                             placeholder="seu@email.com"
-                            required
+                            value={email}
+                            onChange={(event) => {
+                                setEmail(event.target.value);
+                                setValidado(false);
+                            }}
                         />
                     </div>
 
@@ -62,7 +114,12 @@ export function Cadastro() {
                             placeholder="000.000.000-00"
                             inputMode="numeric"
                             maxLength={14}
-                            required
+                            value={cpf}
+                            onChange={(event) => {
+                                setCpf(formatarCPF(event.target.value));
+                                setErro("");
+                                setValidado(false);
+                            }}
                         />
                     </div>
 
@@ -76,7 +133,11 @@ export function Cadastro() {
                             name="senha"
                             className="entrada-cadastro"
                             placeholder="Digite sua senha"
-                            required
+                            value={senha}
+                            onChange={(event) => {
+                                setSenha(event.target.value);
+                                setValidado(false);
+                            }}
                         />
                     </div>
 
@@ -91,9 +152,25 @@ export function Cadastro() {
                             name="confirmarSenha"
                             className="entrada-cadastro"
                             placeholder="Digite a senha novamente"
-                            required
+                            value={confirmarSenha}
+                            onChange={(event) => {
+                                setConfirmarSenha(event.target.value);
+                                setValidado(false);
+                            }}
                         />
                     </div>
+
+                    {erro && (
+                        <div className="alerta-erro" role="alert">
+                            {erro}
+                        </div>
+                    )}
+
+                    {validado && (
+                        <div className="alerta-sucesso" role="status">
+                            Campos validados! Falta conectar à API.
+                        </div>
+                    )}
 
                     <button type="submit" className="botao-cadastro">
                         <i className="bi bi-person-plus me-2"></i>
