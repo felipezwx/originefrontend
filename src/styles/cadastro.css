@@ -41,15 +41,19 @@
 
             min-height: 100vh;
 
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
             padding: 30px 15px;
 
         }
+
+        
+        #root {
+            width: 100%;
+            min-height: calc(100vh - 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
 
 
         /* =====================================================
@@ -60,7 +64,9 @@
 
             width: 100%;
 
-            max-width: 460px;
+            max-width: 500px;
+
+            margin: 0 auto;
 
         }
 
