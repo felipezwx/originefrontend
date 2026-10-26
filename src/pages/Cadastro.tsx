@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { validarEmail, validarCPF, validarSenha, formatarCPF } from "../utils/validacoes";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { cadastrarUsuario } from "../services/api";
 import "../styles/cadastro.css";
 
 export function Cadastro() {
@@ -10,13 +11,13 @@ export function Cadastro() {
     const [cpf, setCpf] = useState("");
     const [senha, setSenha] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
+    const navigate = useNavigate();
+    const [carregando, setCarregando] = useState(false);
 
     const [erro, setErro] = useState("");
-    const [validado, setValidado] = useState(false);
 
-    function handleCadastro() {
+    async function handleCadastro() {
         setErro("");
-        setValidado(false);
 
         if (nome.trim() === "") {
             setErro("Por favor, informe seu nome.");
@@ -43,7 +44,29 @@ export function Cadastro() {
             return;
         }
 
-        setValidado(true);
+        if (carregando) return;
+
+        setCarregando(true);
+
+        try {
+            await cadastrarUsuario({
+                nome: nome.trim(),
+                email: email.trim().toLowerCase(),
+                cpf: cpf.replace(/\D/g, ""),
+                senha: senha
+            });
+
+            navigate("/login");
+
+        } catch (erro) {
+            if (erro instanceof Error) {
+                setErro(erro.message);
+            } else {
+                setErro("Erro ao realizar cadastro.");
+            }
+        } finally {
+            setCarregando(false);
+        }
     }
 
     return (
@@ -80,7 +103,7 @@ export function Cadastro() {
                             value={nome}
                             onChange={(event) => {
                                 setNome(event.target.value);
-                                setValidado(false);
+                                setErro("");
                             }}
                         />
                     </div>
@@ -98,7 +121,7 @@ export function Cadastro() {
                             value={email}
                             onChange={(event) => {
                                 setEmail(event.target.value);
-                                setValidado(false);
+                                setErro("");
                             }}
                         />
                     </div>
@@ -119,7 +142,6 @@ export function Cadastro() {
                             onChange={(event) => {
                                 setCpf(formatarCPF(event.target.value));
                                 setErro("");
-                                setValidado(false);
                             }}
                         />
                     </div>
@@ -137,7 +159,7 @@ export function Cadastro() {
                             value={senha}
                             onChange={(event) => {
                                 setSenha(event.target.value);
-                                setValidado(false);
+                                setErro("");
                             }}
                         />
                     </div>
@@ -156,7 +178,7 @@ export function Cadastro() {
                             value={confirmarSenha}
                             onChange={(event) => {
                                 setConfirmarSenha(event.target.value);
-                                setValidado(false);
+                                setErro("");
                             }}
                         />
                     </div>
@@ -167,15 +189,9 @@ export function Cadastro() {
                         </div>
                     )}
 
-                    {validado && (
-                        <div className="alerta-sucesso" role="status">
-                            Campos validados! Falta conectar à API.
-                        </div>
-                    )}
-
-                    <button type="submit" className="botao-cadastro">
+                    <button type="submit" className="botao-cadastro" disabled={carregando}>
                         <i className="bi bi-person-plus me-2"></i>
-                        Criar minha conta
+                    {carregando ? "Cadastrando..." : "Criar minha conta"}
                     </button>
 
                 </form>
