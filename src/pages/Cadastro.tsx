@@ -2,6 +2,7 @@ import { useState } from "react";
 import { validarEmail, validarCPF, validarSenha, formatarCPF } from "../utils/validacoes";
 import { Link, useNavigate } from "react-router-dom";
 import { cadastrarUsuario } from "../services/api";
+import { UsuarioCadastro } from "../models/UsuarioCadastro";
 import "../styles/cadastro.css";
 
 export function Cadastro() {
@@ -49,12 +50,9 @@ export function Cadastro() {
         setCarregando(true);
 
         try {
-            await cadastrarUsuario({
-                nome: nome.trim(),
-                email: email.trim().toLowerCase(),
-                cpf: cpf.replace(/\D/g, ""),
-                senha: senha
-            });
+            const usuario = new UsuarioCadastro(nome, email, cpf, senha);
+
+            await cadastrarUsuario(usuario.dadosParaCadastro);
 
             navigate("/login");
 
