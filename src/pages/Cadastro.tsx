@@ -14,6 +14,8 @@ export function Cadastro() {
     const [confirmarSenha, setConfirmarSenha] = useState("");
     const navigate = useNavigate();
     const [carregando, setCarregando] = useState(false);
+    const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
 
     const [erro, setErro] = useState("");
 
