@@ -471,6 +471,31 @@
 
         }
 
+        .campo-senha {
+            position: relative;
+        }
+
+        .campo-senha .entrada-cadastro {
+            width: 100%;
+            padding-right: 45px;
+        }
+
+        .botao-olho {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .botao-olho:hover {
+            color: white;
+        }
+
 
         /* =====================================================
            RESPONSIVIDADE

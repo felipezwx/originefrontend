@@ -150,18 +150,30 @@ export function Cadastro() {
                         <label htmlFor="campoSenha">
                             <i className="bi bi-key me-1"></i> Senha
                         </label>
-                        <input
-                            type="password"
-                            id="campoSenha"
-                            name="senha"
-                            className="entrada-cadastro"
-                            placeholder="Digite sua senha"
-                            value={senha}
-                            onChange={(event) => {
-                                setSenha(event.target.value);
-                                setErro("");
-                            }}
-                        />
+
+                        <div className="campo-senha">
+                            <input
+                                type={mostrarSenha ? "text" : "password"}
+                                id="campoSenha"
+                                name="senha"
+                                className="entrada-cadastro"
+                                placeholder="Digite sua senha"
+                                value={senha}
+                                onChange={(event) => {
+                                    setSenha(event.target.value);
+                                    setErro("");
+                                }}
+                            />
+
+                            <button
+                                type="button"
+                                className="botao-olho"
+                                onClick={() => setMostrarSenha(!mostrarSenha)}
+                                aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                            >
+                                <i className={mostrarSenha ? "bi bi-eye-slash" : "bi bi-eye"}></i>
+                            </button>
+                        </div>
                     </div>
 
                     <div className="grupo-formulario">
@@ -169,18 +181,30 @@ export function Cadastro() {
                             <i className="bi bi-shield-check me-1"></i>
                         Confirmar senha
                         </label>
-                        <input
-                            type="password"
-                            id="campoConfirmarSenha"
-                            name="confirmarSenha"
-                            className="entrada-cadastro"
-                            placeholder="Digite a senha novamente"
-                            value={confirmarSenha}
-                            onChange={(event) => {
-                                setConfirmarSenha(event.target.value);
-                                setErro("");
-                            }}
-                        />
+
+                        <div className="campo-senha">
+                            <input
+                                type={mostrarConfirmarSenha ? "text" : "password"}
+                                id="campoConfirmarSenha"
+                                name="confirmarSenha"
+                                className="entrada-cadastro"
+                                placeholder="Digite a senha novamente"
+                                value={confirmarSenha}
+                                onChange={(event) => {
+                                    setConfirmarSenha(event.target.value);
+                                    setErro("");
+                                }}
+                            />
+
+                            <button
+                                type="button"
+                                className="botao-olho"
+                                onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
+                                aria-label={mostrarConfirmarSenha ? "Ocultar senha" : "Mostrar senha"}
+                            >
+                                <i className={mostrarConfirmarSenha ? "bi bi-eye-slash" : "bi bi-eye"}></i>
+                            </button>
+                        </div>
                     </div>
 
                     {erro && (
