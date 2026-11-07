@@ -1,0 +1,130 @@
+
+body:has(.pagina-originie) {
+    margin: 0;
+    padding: 0;
+    display: block;
+    background: #111111;
+}
+
+#root:has(.pagina-originie) {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+.pagina-originie {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.pagina-originie main {
+    flex: 1;
+}
+
+.pagina-originie .revelacao {
+    opacity: 1;
+    transform: none;
+}
+
+.pagina-originie .heroi-principal {
+    background: radial-gradient(
+        circle at 70% 40%,
+        #35201c 0%,
+        #181818 36%,
+        #111111 80%
+    );
+}
+
+.pagina-originie .video-preenchimento-alternativo {
+    width: 100%;
+    min-height: 340px;
+    height: 100%;
+    background: linear-gradient(140deg, #202020, #111111);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cc2a1a;
+    font-size: 68px;
+}
+
+.pagina-originie .secao-cta .btn-light {
+    color: #171717;
+}
+
+
+.pagina-originie #barraNavegacao {
+    background-color: #111111 !important;
+    border-bottom: 1px solid #303030;
+    padding: 15px 0;
+    min-height: 75px;
+}
+
+.pagina-originie #barraNavegacao .navbar-brand img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+.pagina-originie #barraNavegacao .link-nav {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+.pagina-originie #barraNavegacao .link-nav:hover {
+    color: #cc2a1a;
+}
+
+.pagina-originie #barraNavegacao .botao-vermelho {
+    background: #cc2a1a;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.pagina-originie #barraNavegacao .botao-vermelho:hover {
+    background: #a82014;
+}
+
+.pagina-originie .rodape {
+    width: 100%;
+    background-color: #181818;
+    border-top: 1px solid #303030;
+    padding: 35px 0;
+    color: #ffffff;
+}
+
+.pagina-originie .logo-rodape {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+.pagina-originie .copia-rodape {
+    color: #999999;
+    font-size: 13px;
+}
+
+.pagina-originie .rodape .fundo-vermelho {
+    background-color: #cc2a1a !important;
+    color: white;
+    padding: 8px 12px;
+}
+
+@media (max-width: 991px) {
+    .pagina-originie #barraNavegacao .navbar-collapse {
+        padding: 15px 0;
+    }
+
+    .pagina-originie .rodape {
+        text-align: center;
+    }
+}

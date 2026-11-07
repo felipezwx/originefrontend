@@ -1,29 +1,94 @@
+
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export function Header() {
+    const [menuAberto, setMenuAberto] = useState(false);
+
     return (
-        <header className="site-header">
+        <nav
+            className="navbar navbar-expand-lg navbar-dark sticky-top"
+            id="barraNavegacao"
+        >
+            <div className="container">
 
-            <Link to="/" className="site-logo">
-                <img src="/imagens/logo.png" alt="Originie" />
-            </Link>
-
-            <nav className="site-nav">
-                <a href="#inicio">Início</a>
-                <a href="#servicos">Serviços</a>
-                <a href="#sobre">Sobre</a>
-            </nav>
-
-            <div className="site-acesso">
-                <Link to="/login" className="site-entrar">
-                    Entrar
+                <Link to="/" className="navbar-brand">
+                    <img src="/imagens/logo.png" alt="Originie Audiovisual"height="36" />
                 </Link>
 
-                <Link to="/cadastro" className="site-cadastrar">
-                    Criar conta
-                </Link>
+                <button
+                    className="navbar-toggler border-0"
+                    type="button"
+                    aria-controls="menuNavegacao"
+                    aria-expanded={menuAberto}
+                    aria-label="Abrir menu"
+                    onClick={() => setMenuAberto(!menuAberto)}
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+
+                <div
+                    className={`collapse navbar-collapse ${menuAberto ? "show" : ""}`}
+                    id="menuNavegacao"
+                >
+                    <ul className="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+
+                        <li className="nav-item">
+                            <Link
+                                className="nav-link link-nav ativo"
+                                to="/"
+                                onClick={() => setMenuAberto(false)}
+                            >
+                                Início
+                            </Link>
+                        </li>
+
+                        <li className="nav-item">
+                            <a
+                                className="nav-link link-nav"
+                                href="#sobre"
+                                onClick={() => setMenuAberto(false)}
+                            >
+                                Sobre
+                            </a>
+                        </li>
+
+                        <li className="nav-item">
+                            <a
+                                className="nav-link link-nav"
+                                href="#servicos"
+                                onClick={() => setMenuAberto(false)}
+                            >
+                                Serviços
+                            </a>
+                        </li>
+
+                        <li className="nav-item ms-lg-2">
+                            <Link
+                                className="nav-link link-nav"
+                                to="/login"
+                                onClick={() => setMenuAberto(false)}
+                            >
+                                <i className="bi bi-person-circle me-1"></i>
+                                Entrar
+                            </Link>
+                        </li>
+
+                        <li className="nav-item ms-lg-2">
+                            <a
+                                className="botao-vermelho"
+                                href="#contato"
+                                onClick={() => setMenuAberto(false)}
+                            >
+                                Orçamento
+                                <i className="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+
             </div>
-
-        </header>
+        </nav>
     );
 }
