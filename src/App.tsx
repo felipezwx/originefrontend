@@ -2,6 +2,7 @@ import { Routes, Route, } from "react-router-dom";
 import { Index } from "./pages/Index";
 import { Login } from "./pages/Login";
 import { Cadastro } from "./pages/Cadastro";
+import { Servicos } from "./pages/Servicos";
 import { useEffect, useState } from "react";
 import { UsuarioContext } from "./UsuarioContext";
 import { consultarPerfil, type Usuario } from "./services/api";
@@ -36,6 +37,7 @@ function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/cadastro" element={<Cadastro />} />
+                <Route path="/servicos" element={<Servicos />} />
             </Routes>
         </UsuarioContext.Provider>
     );
