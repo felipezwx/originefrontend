@@ -16,16 +16,18 @@ type DadosLogin = {
     senha: string;
 };
 
+export type Usuario = {
+    id: number;
+    nome: string;
+    email: string;
+    cpf: string | null;
+    tipo: "usuario" | "admin";
+};
+
 type RespostaLogin = {
     mensagem: string;
     token: string;
-    usuario: {
-        id: number;
-        nome: string;
-        email: string;
-        cpf: string | null;
-        tipo: "usuario" | "admin";
-    };
+    usuario: Usuario;
 };
 
 export async function cadastrarUsuario(dados: DadosCadastro): Promise<RespostaCadastro> {
@@ -74,4 +76,26 @@ export async function entrarUsuario(dados: DadosLogin): Promise<RespostaLogin> {
     }
 
     return resultado;
+}
+
+export async function consultarPerfil(token: string): Promise<Usuario> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/auth/perfil`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao consultar perfil.");
+    }
+
+    return resultado.usuario;
 }

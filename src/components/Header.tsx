@@ -1,9 +1,11 @@
-
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UsuarioContext } from "../UsuarioContext";
 import { Link } from "react-router-dom";
+
 
 export function Header() {
     const [menuAberto, setMenuAberto] = useState(false);
+    const usuario = useContext(UsuarioContext)?.usuario;
 
     return (
         <nav
@@ -64,14 +66,23 @@ export function Header() {
                         </li>
 
                         <li className="nav-item ms-lg-2">
-                            <Link
-                                className="nav-link link-nav"
-                                to="/login"
-                                onClick={() => setMenuAberto(false)}
-                            >
-                                <i className="bi bi-person-circle me-1"></i>
-                                Entrar
-                            </Link>
+
+                            {usuario ? (
+                                <span className="nav-link link-nav">
+                                    <i className="bi bi-person-circle me-1"></i>
+                                    {usuario.nome.trim().split(/\s+/)[0]}
+                                </span>
+                            ) : (
+
+                                <Link
+                                    className="nav-link link-nav"
+                                    to="/login"
+                                    onClick={() => setMenuAberto(false)}
+                                >
+                                    <i className="bi bi-person-circle me-1"></i>
+                                    Entrar
+                                </Link>
+                            )}
                         </li>
 
                         <li className="nav-item ms-lg-2">
