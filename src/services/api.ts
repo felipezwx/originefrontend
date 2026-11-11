@@ -30,6 +30,25 @@ type RespostaLogin = {
     usuario: Usuario;
 };
 
+export type Servico = {
+    id: number;
+    nome: string;
+    slug: string;
+    descricao: string;
+    preco: string;
+    categoria: string;
+    video: string | null;
+    ativo: number;
+};
+
+type RespostaServicos = {
+    pagina: number;
+    limite: number;
+    total: number;
+    totalPaginas: number;
+    dados: Servico[];
+};
+
 export async function cadastrarUsuario(dados: DadosCadastro): Promise<RespostaCadastro> {
     let resposta: Response;
 
@@ -98,4 +117,29 @@ export async function consultarPerfil(token: string): Promise<Usuario> {
     }
 
     return resultado.usuario;
+}
+
+export async function listarServicos(
+    token: string,
+    pagina: number = 1
+): Promise<RespostaServicos> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/servicos?pagina=${pagina}&limite=10`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao listar os serviços.");
+    }
+
+    return resultado;
 }
