@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { listarServicos, type Servico } from "../services/api";
+import "../styles/servicos.css";
 
 const moeda = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -56,7 +57,7 @@ export function Servicos() {
     }
 
     return (
-        <main className="container py-4">
+        <main className="pagina-servicos container py-4">
             <Link to="/">Voltar ao início</Link>
             <h1 className="my-4">Serviços</h1>
 
@@ -68,8 +69,8 @@ export function Servicos() {
                     {servicos.length === 0 ? (
                         <p>Nenhum serviço encontrado.</p>
                     ) : (
-                        <div className="table-responsive">
-                            <table className="table align-middle">
+                        <div className="table-responsive painel-tabela">
+                            <table className="table align-middle tabela-admin">
                                 <thead>
                                     <tr>
                                         <th scope="col">ID</th>
@@ -86,7 +87,11 @@ export function Servicos() {
                                             <td>{servico.nome}</td>
                                             <td>{servico.categoria}</td>
                                             <td>{moeda.format(Number(servico.preco))}</td>
-                                            <td>{servico.ativo === 1 ? "Ativo" : "Inativo"}</td>
+                                            <td>
+                                                <span className={servico.ativo === 1 ? "status-ativo" : "status-inativo"}>
+                                                    {servico.ativo === 1 ? "Ativo" : "Inativo"}
+                                                </span>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
