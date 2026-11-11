@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { validarEmail } from "../utils/validacoes";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { entrarUsuario } from "../services/api";
 import "../styles/login.css";
 
 export function Login() {
@@ -8,11 +9,14 @@ export function Login() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [erro, setErro] = useState("");
-    const [validado, setValidado] = useState(false);
+    const [carregando, setCarregando] = useState(false);
 
-    function handleLogin() {
+    const navigate = useNavigate();
+
+    async function handleLogin() {
+        if (carregando) return;
+
         setErro("");
-        setValidado(false);
 
         if(email.trim() === "") {
             setErro("Por favor, informe seu e-mail.");
@@ -29,7 +33,26 @@ export function Login() {
             return;
         }
 
-        setValidado(true);
+        setCarregando(true);
+
+        try {
+            const resultado = await entrarUsuario({
+                email: email.trim().toLowerCase(),
+                senha
+            });
+
+            localStorage.setItem("token", resultado.token);
+            navigate("/");
+        } catch (erro) {
+            if (erro instanceof Error) {
+                setErro(erro.message);
+            } else {
+                setErro("Erro ao fazer login.");
+            }
+        } finally {
+            setCarregando(false);
+        }
+
     }
 
     return (
@@ -65,7 +88,6 @@ export function Login() {
                             onChange={(event) => {
                                 setEmail(event.target.value);
                                 setErro("");
-                                setValidado(false);
                             }}
                         />
                     </div>
@@ -85,7 +107,6 @@ export function Login() {
                             onChange={(event) => {
                                 setSenha(event.target.value);
                                 setErro("");
-                                setValidado(false);
                             }}
                         />
                     </div>
@@ -96,15 +117,9 @@ export function Login() {
                         </p>
                     )}
 
-                    {validado && (
-                        <p className="mensagem-sucesso" role="status">
-                            Campos validados! Falta conectar à API.
-                        </p>
-                    )}
-
-                    <button type="submit" className="botao-entrar">
+                    <button type="submit" className="botao-entrar" disabled={carregando}>
                         <i className="bi bi-box-arrow-in-right me-2"></i>
-                        Entrar
+                        {carregando ? "Entrando..." : "Entrar"}
                     </button>
                 </form>
 
