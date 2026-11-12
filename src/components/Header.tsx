@@ -48,7 +48,7 @@ export function Header() {
                         <li className="nav-item">
                             <a
                                 className="nav-link link-nav"
-                                href="#sobre"
+                                href="/#sobre"
                                 onClick={() => setMenuAberto(false)}
                             >
                                 Sobre
@@ -56,13 +56,13 @@ export function Header() {
                         </li>
 
                         <li className="nav-item">
-                            <a
+                            <Link
                                 className="nav-link link-nav"
-                                href="#servicos"
+                                to="/servicos"
                                 onClick={() => setMenuAberto(false)}
                             >
                                 Serviços
-                            </a>
+                            </Link>
                         </li>
 
                         <li className="nav-item ms-lg-2">
@@ -88,7 +88,7 @@ export function Header() {
                         <li className="nav-item ms-lg-2">
                             <a
                                 className="botao-vermelho"
-                                href="#contato"
+                                href="/#contato"
                                 onClick={() => setMenuAberto(false)}
                             >
                                 Orçamento

@@ -143,3 +143,31 @@ export async function listarServicos(
 
     return resultado;
 }
+
+export type ServicoPublico = Omit<Servico, "ativo">;
+
+type RespostaServicosPublicos = Omit<RespostaServicos, "dados"> & {
+    dados: ServicoPublico[];
+};
+
+export async function listarServicosPublicos(
+    pagina: number = 1
+): Promise<RespostaServicosPublicos> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(
+            `${API_URL}/api/servicos/publicos?pagina=${pagina}&limite=10`
+        );
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao carregar o catálogo.");
+    }
+
+    return resultado;
+}

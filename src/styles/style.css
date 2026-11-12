@@ -476,6 +476,44 @@ html {
     margin-bottom: 15px;
 }
 
+.busca-servicos {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 380px;
+    margin-bottom: 24px;
+    padding: 0 14px;
+    background: var(--fundo-2);
+    border: 1px solid #555;
+    border-radius: 6px;
+}
+
+.busca-servicos i {
+    color: #aaa;
+    font-size: 15px;
+}
+
+.busca-servicos input {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--branco);
+    font: inherit;
+}
+
+.busca-servicos input::placeholder {
+    color: #aaa;
+}
+
+.busca-servicos:focus-within {
+    outline: 2px solid var(--vermelho);
+    outline-offset: 2px;
+}
+
 @media (max-width: 991px) {
     .heroi-principal {
         min-height: 75vh;
