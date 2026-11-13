@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import { UsuarioContext } from "../UsuarioContext";
 import { validarEmail } from "../utils/validacoes";
-import { Link, useNavigate } from "react-router-dom";
 import { entrarUsuario } from "../services/api";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/login.css";
 
 export function Login() {
@@ -14,6 +14,9 @@ export function Login() {
 
     const navigate = useNavigate();
     const contexto = useContext(UsuarioContext);
+
+    const location = useLocation();
+    const destino = location.state?.voltarPara === "/orcamento" ? "/orcamento" : "/";
 
     async function handleLogin() {
         if (carregando) return;
@@ -45,7 +48,7 @@ export function Login() {
 
             localStorage.setItem("token", resultado.token);
             contexto?.setUsuario(resultado.usuario);
-            navigate("/");
+            navigate(destino, { replace: true });
         } catch (erro) {
             if (erro instanceof Error) {
                 setErro(erro.message);

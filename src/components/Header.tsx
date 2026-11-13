@@ -86,14 +86,14 @@ export function Header() {
                         </li>
 
                         <li className="nav-item ms-lg-2">
-                            <a
+                            <Link
                                 className="botao-vermelho"
-                                href="/#contato"
+                                to="/orcamento"
                                 onClick={() => setMenuAberto(false)}
                             >
                                 Orçamento
                                 <i className="bi bi-arrow-right ms-1"></i>
-                            </a>
+                            </Link>
                         </li>
 
                     </ul>
