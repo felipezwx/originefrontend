@@ -73,7 +73,7 @@ export function Orcamento() {
     }
 
     return (
-        <div className="pagina-originie">
+        <div className="pagina-originie pagina-orcamento">
             <Header />
 
             <main className="container py-5">

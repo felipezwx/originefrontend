@@ -514,13 +514,163 @@ html {
     outline-offset: 2px;
 }
 
-@media (max-width: 991px) {
-    .heroi-principal {
-        min-height: 75vh;
+/* Página de orçamento */
+.pagina-orcamento {
+    width: 100%;
+    background: var(--fundo);
+    color: var(--branco);
+}
+
+.pagina-orcamento > main.container {
+    width: 100%;
+    max-width: 860px;
+    margin-inline: auto;
+    padding-inline: clamp(16px, 3vw, 32px);
+}
+
+.pagina-orcamento .titulo-secao {
+    margin: 0 0 24px;
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    line-height: 1.05;
+}
+
+/* Painel do formulário */
+.pagina-orcamento form {
+    --bs-gutter-x: 1.25rem;
+    --bs-gutter-y: 1.25rem;
+
+    margin-inline: 0;
+    padding: 8px clamp(12px, 3vw, 28px) 28px;
+    background: var(--fundo-2);
+    border: 1px solid #353535;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgb(0 0 0 / 16%);
+}
+
+.pagina-orcamento .form-label {
+    margin-bottom: 7px;
+    color: #ededed;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.pagina-orcamento .form-control {
+    min-height: 46px;
+    padding: 10px 13px;
+    background-color: #101010;
+    color: var(--branco);
+    border: 1px solid #666;
+    border-radius: 6px;
+}
+
+.pagina-orcamento .form-control::placeholder {
+    color: #aaa;
+}
+
+.pagina-orcamento .form-control[readonly] {
+    background-color: #222;
+    color: #ccc;
+    border-color: #444;
+}
+
+.pagina-orcamento textarea.form-control {
+    min-height: 130px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+.pagina-orcamento .form-control:focus-visible,
+.pagina-orcamento .form-check-input:focus-visible,
+.pagina-orcamento .botao-vermelho:focus-visible {
+    outline: 2px solid #ff796b;
+    outline-offset: 3px;
+    box-shadow: none;
+}
+
+/* Seleção de serviços */
+.pagina-orcamento fieldset > legend {
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.pagina-orcamento .form-check {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.pagina-orcamento .form-check-input {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    float: none;
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.pagina-orcamento .form-check-label {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    min-height: 46px;
+    padding: 10px 12px 10px 42px;
+    background: #1c1c1c;
+    color: #ddd;
+    border: 1px solid #454545;
+    border-radius: 6px;
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.pagina-orcamento .form-check-label:hover {
+    background: #242424;
+    border-color: #777;
+}
+
+.pagina-orcamento .form-check-input:checked {
+    background-color: var(--vermelho);
+    border-color: var(--vermelho);
+}
+
+.pagina-orcamento .form-check-input:checked + .form-check-label {
+    background: #30201e;
+    color: #fff;
+    border-color: #b6584e;
+}
+
+/* Botão e retorno da conferência */
+.pagina-orcamento .botao-vermelho {
+    min-height: 46px;
+    padding-inline: 24px;
+    border-radius: 6px;
+}
+
+.pagina-orcamento form [role="status"] {
+    margin-bottom: 0;
+    color: #d4d4d4;
+}
+
+.pagina-orcamento form [role="alert"] {
+    color: #ff9d92;
+}
+
+@media (max-width: 575px) {
+    .pagina-orcamento > main.container {
+        padding-inline: 16px;
     }
 
-    .titulo-heroi {
-        font-size: clamp(48px, 8vw, 80px);
+    .pagina-orcamento form {
+        --bs-gutter-x: 0.75rem;
+        padding-inline: 10px;
+        padding-bottom: 20px;
+    }
+
+    .pagina-orcamento form .botao-vermelho {
+        width: 100%;
     }
 }
 
@@ -571,3 +721,12 @@ html {
     max-height: 120px;
     overflow-y: auto;
 }
+
+.heroi-principal {
+    min-height: 75vh;
+}
+
+.titulo-heroi {
+    font-size: clamp(48px, 8vw, 80px);
+}
+
