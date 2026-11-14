@@ -49,6 +49,13 @@ type RespostaServicos = {
     dados: Servico[];
 };
 
+type DadosEdicaoPerfil = {
+    nome: string;
+    cpf: string;
+    senhaAtual: string;
+    novaSenha: string;
+}
+
 export async function cadastrarUsuario(dados: DadosCadastro): Promise<RespostaCadastro> {
     let resposta: Response;
 
@@ -170,4 +177,33 @@ export async function listarServicosPublicos(
     }
 
     return resultado;
+}
+
+export async function atualizarPerfil(
+    token: string,
+    dados: DadosEdicaoPerfil
+): Promise<Usuario> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/auth/perfil`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+    } catch {
+        throw new Error("Não foi possivel conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if(!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao atualizar o perfil.");
+    }
+    
+    return resultado.usuario;
+
 }

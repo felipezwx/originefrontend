@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { UsuarioContext } from "../UsuarioContext";
 import { Header } from "../components/Header";
@@ -8,6 +8,7 @@ export function MinhaConta() {
     const contexto = useContext(UsuarioContext);
     const usuario = contexto?.usuario;
     const navigate = useNavigate();
+    const [editando, setEditando] = useState(false);
 
     function sairDaConta() {
         localStorage.removeItem("token");
@@ -27,16 +28,73 @@ export function MinhaConta() {
                 <h1 className="titulo-secao mb-4">Minha conta</h1>
 
                 {usuario ? (
-                    <dl>
-                        <dt>Nome completo</dt>
-                        <dd className="mb-3">{usuario.nome}</dd>
+                    editando ? (
+                        <div className="row g-3 mb-4">
+                            <div className="col-md-6">
+                                <label htmlFor="nome" className="form-label">Nome Completo</label>
+                                <input
+                                    id="nome"
+                                    name="nome"
+                                    className="form-control"
+                                    defaultValue={usuario.nome}
+                                    autoFocus
+                                />
+                            </div>
 
-                        <dt>E-mail</dt>
-                        <dd className="mb-3">{usuario.email}</dd>
+                            <div className="col-md-6">
+                                <label htmlFor="cpf" className="form-label">CPF</label>
+                                <input
+                                    id="cpf"
+                                    name="cpf"
+                                    className="form-control"
+                                    inputMode="numeric"
+                                    defaultValue={usuario.cpf ?? ""}
+                                />
+                            </div>
 
-                        <dt>CPF</dt>
-                        <dd className="mb-4">{usuario.cpf || "Não informado"}</dd>
-                    </dl>
+                            <div className="col-md-6">
+                                <label htmlFor="email" className="form-label">E-mail</label>
+                                <input
+                                    id="email"
+                                    type="email"
+                                    className="form-control"
+                                    value={usuario.email}
+                                    readOnly
+                                />
+                            </div>
+
+                            <div className="col-12">
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-light"
+                                    onClick={() => setEditando(false)}
+                                >
+                                    Cancelar edição
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="mb-4">
+                            <dl>
+                                <dt>Nome completo</dt>
+                                <dd className="mb-3">{usuario.nome}</dd>
+
+                                <dt>E-mail</dt>
+                                <dd className="mb-3">{usuario.email}</dd>
+
+                                <dt>CPF</dt>
+                                <dd className="mb-4">{usuario.cpf || "Não informado"}</dd>
+                            </dl>
+
+                            <button 
+                                type="button"
+                                className="btn btn-outline-light"
+                                onClick={() => setEditando(true)}
+                            >
+                                Editar perfil
+                            </button>
+                        </div>
+                    )
                 ) : (
                     <p role="status">Aguardando os dados da conta...</p>
                 )}
