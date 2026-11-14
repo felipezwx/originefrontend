@@ -68,10 +68,14 @@ export function Header() {
                         <li className="nav-item ms-lg-2">
 
                             {usuario ? (
-                                <span className="nav-link link-nav">
+                                <Link 
+                                    className="nav-link link-nav"
+                                    to="/minha-conta"
+                                    onClick={() => setMenuAberto(false)}
+                                >
                                     <i className="bi bi-person-circle me-1"></i>
                                     {usuario.nome.trim().split(/\s+/)[0]}
-                                </span>
+                                </Link>
                             ) : (
 
                                 <Link

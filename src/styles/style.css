@@ -514,7 +514,7 @@ html {
     outline-offset: 2px;
 }
 
-/* Página de orçamento */
+
 .pagina-orcamento {
     width: 100%;
     background: var(--fundo);
@@ -534,7 +534,7 @@ html {
     line-height: 1.05;
 }
 
-/* Painel do formulário */
+
 .pagina-orcamento form {
     --bs-gutter-x: 1.25rem;
     --bs-gutter-y: 1.25rem;
@@ -587,7 +587,7 @@ html {
     box-shadow: none;
 }
 
-/* Seleção de serviços */
+
 .pagina-orcamento fieldset > legend {
     margin-bottom: 10px;
     font-size: 1rem;

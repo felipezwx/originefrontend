@@ -5,6 +5,7 @@ import { Cadastro } from "./pages/Cadastro";
 import { Servicos } from "./pages/Servicos";
 import { Catalogo } from "./pages/Catalogo";
 import { Orcamento } from "./pages/Orcamento";
+import { MinhaConta } from "./pages/MinhaConta";
 import { useEffect, useState } from "react";
 import { UsuarioContext } from "./UsuarioContext";
 import { consultarPerfil, type Usuario } from "./services/api";
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/servicos" element={<Catalogo />} />
                 <Route path="/painel/servicos" element={<Servicos />} />
                 <Route path="/orcamento" element={<Orcamento />} />
+                <Route path="/minha-conta" element={<MinhaConta />} />
             </Routes>
         </UsuarioContext.Provider>
     );
