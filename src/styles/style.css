@@ -658,6 +658,67 @@ html {
     color: #ff9d92;
 }
 
+.pagina-conta {
+    max-width: 800px;
+}
+
+.pagina-conta .painel-conta {
+    margin-inline: 0;
+    padding: clamp(18px, 4vw, 32px);
+    background: var(--fundo-2);
+    border: 1px solid #383838;
+    border-radius: 12px;
+}
+
+.pagina-conta dl {
+    margin: 0 0 24px;
+}
+
+.pagina-conta dt {
+    margin-bottom: 4px;
+    color: #b3b3b3;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.pagina-conta dd {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #383838;
+    color: var(--branco);
+    overflow-wrap: anywhere;
+}
+
+.pagina-conta .form-control {
+    min-height: 46px;
+    background: var(--fundo);
+    color: var(--branco);
+    border-color: #666;
+}
+
+.pagina-conta .form-control[readonly] {
+    background: var(--fundo-3);
+    color: #ccc;
+    border-color: #444;
+}
+
+.pagina-conta .form-control:focus-visible,
+.pagina-conta button:focus-visible {
+    outline: 2px solid #ff796b;
+    outline-offset: 3px;
+    box-shadow: none;
+}
+
+.pagina-conta .sair-conta {
+    padding: 8px 0;
+    color: #ccc;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.pagina-conta .sair-conta:hover {
+    color: var(--branco);
+}
+
 @media (max-width: 575px) {
     .pagina-orcamento > main.container {
         padding-inline: 16px;

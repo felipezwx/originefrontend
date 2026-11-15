@@ -88,14 +88,14 @@ export function MinhaConta() {
         <div className="pagina-originie">
             <Header />
 
-            <main className="container py-5">
+            <main className="container py-5 pagina-conta">
                 <h1 className="titulo-secao mb-4">Minha conta</h1>
                 {aviso && <p role="status">{aviso}</p>}
 
                 {usuario ? (
                     editando ? (
                         <form
-                            className="row g-3 mb-4"
+                            className="row g-3 mb-4 painel-conta"
                             onChange={() => setAviso("")}
                             onSubmit={(event) => {
                                 event.preventDefault();
@@ -192,7 +192,7 @@ export function MinhaConta() {
                             </div>
                         </form>
                     ) : (
-                        <div className="mb-4">
+                        <div className="painel-conta mb-4">
                             <dl>
                                 <dt>Nome completo</dt>
                                 <dd className="mb-3">{usuario.nome}</dd>
@@ -219,7 +219,7 @@ export function MinhaConta() {
 
                 <button
                     type="button"
-                    className="botao-vermelho"
+                    className="btn sair-conta"
                     onClick={sairDaConta}
                 >
                     Sair da conta
