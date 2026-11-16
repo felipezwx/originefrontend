@@ -60,3 +60,69 @@ body:has(.pagina-servicos) {
     color: #d75c5c;
     font-weight: 600;
 }
+
+.pagina-servicos .cabecalho-servicos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.pagina-servicos .cabecalho-servicos h1 {
+    margin: 0;
+    color: #f5f5f5;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700;
+}
+
+.pagina-servicos #cadastro-servico {
+    padding: clamp(18px, 3vw, 32px);
+    background: #191919;
+    border: 1px solid #383838;
+    border-radius: 12px;
+    color-scheme: dark;
+}
+
+.pagina-servicos #cadastro-servico h2 {
+    color: #f5f5f5;
+    font-weight: 600;
+}
+
+.pagina-servicos #cadastro-servico .form-label {
+    color: #dedede;
+    font-weight: 500;
+}
+
+.pagina-servicos #cadastro-servico :is(.form-control, .form-select) {
+    background-color: #111;
+    border-color: #555;
+    color: #f5f5f5;
+}
+
+.pagina-servicos #cadastro-servico .form-control::placeholder {
+    color: #aaa;
+}
+
+.pagina-servicos #cadastro-servico :is(.form-control, .form-select):focus {
+    border-color: #ff8176;
+    box-shadow: 0 0 0 3px rgb(255 129 118 / 18%);
+}
+
+.pagina-servicos .tabela-admin td:last-child {
+    white-space: nowrap;
+}
+
+.pagina-servicos .tabela-admin .btn-outline-danger {
+    --bs-btn-color: #ff9188;
+    --bs-btn-border-color: #a94d47;
+    --bs-btn-hover-bg: #a82f25;
+    --bs-btn-hover-border-color: #a82f25;
+}
+
+@media (max-width: 576px) {
+    .pagina-servicos .tabela-admin :is(th, td) {
+        padding: 12px;
+    }
+}

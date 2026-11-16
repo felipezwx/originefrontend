@@ -152,23 +152,25 @@ export function Servicos() {
     return (
         <main className="pagina-servicos container py-4">
             <Link to="/">Voltar ao início</Link>
-            <h1 className="my-4">Serviços</h1>
+            <div className="cabecalho-servicos">
+                <h1>Serviços</h1>
 
-            <button
-                type="button"
-                className="btn btn-outline-light mb-3"
-                aria-expanded={cadastroAberto}
-                aria-controls="cadastro-servico"
-                disabled={salvando}
-                onClick={() => {
-                    setServicoEmEdicao(null);
-                    setCadastroAberto(!cadastroAberto);
-                    setErroCadastro("");
-                    setMensagemCadastro("");
-                }}
-            >
-                {cadastroAberto ? "Fechar Formulário" : "Novo serviço"}
-            </button>
+                <button
+                    type="button"
+                    className="btn btn-danger"
+                    aria-expanded={cadastroAberto}
+                    aria-controls="cadastro-servico"
+                    disabled={salvando}
+                    onClick={() => {
+                        setServicoEmEdicao(null);
+                        setCadastroAberto(!cadastroAberto);
+                        setErroCadastro("");
+                        setMensagemCadastro("");
+                    }}
+                >
+                    {cadastroAberto ? "Fechar Formulário" : "Novo serviço"}
+                </button>
+            </div>
 
             <form key={servicoEmEdicao?.id ?? "novo"} id="cadastro-servico" hidden={!cadastroAberto} className="mb-4" onSubmit={salvarServico}>
                 <h2 className="h4 mb-3">
