@@ -56,6 +56,8 @@ type DadosEdicaoPerfil = {
     novaSenha: string;
 }
 
+type DadosNovoServico = Omit<Servico, "id">;
+
 export async function cadastrarUsuario(dados: DadosCadastro): Promise<RespostaCadastro> {
     let resposta: Response;
 
@@ -206,4 +208,32 @@ export async function atualizarPerfil(
     
     return resultado.usuario;
 
+}
+
+export async function cadastrarServico(
+    token: string,
+    dados: DadosNovoServico
+): Promise<{ id: number; mensagem: string }> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/servicos`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao cadastrar o serviço.");
+    }
+
+    return resultado;
 }
