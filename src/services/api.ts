@@ -266,3 +266,29 @@ export async function atualizarServico(
 
     return resultado;
 }
+
+export async function excluirServico(
+    token: string,
+    id: number
+): Promise<{ mensagem: string }> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/servicos/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao excluir o serviço.");
+    }
+
+    return resultado;
+}

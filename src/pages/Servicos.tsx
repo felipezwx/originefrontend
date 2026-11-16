@@ -1,6 +1,6 @@
 import { useEffect, useState, type SubmitEvent } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { atualizarServico, cadastrarServico, listarServicos, type Servico } from "../services/api";
+import { atualizarServico, cadastrarServico, excluirServico, listarServicos, type Servico } from "../services/api";
 import "../styles/servicos.css";
 
 const moeda = new Intl.NumberFormat("pt-BR", {
@@ -104,6 +104,36 @@ export function Servicos() {
             setErroCadastro(
                 erro instanceof Error ? erro.message : "Erro ao cadastrar o serviço."
             );
+        } finally {
+            setSalvando(false);
+        }
+    }
+
+    async function confirmarExclusao(servico: Servico) {
+        if (!token || salvando) return;
+
+        const confirmou = window.confirm(`Excluir o serviço "${servico.nome}"?`);
+        if (!confirmou) return;
+
+        setSalvando(true);
+        setMensagemCadastro("");
+
+        try {
+            const resultado = await excluirServico(token, servico.id);
+
+            if (servicoEmEdicao?.id === servico.id) {
+                setServicoEmEdicao(null);
+                setCadastroAberto(false);
+                setErroCadastro("");
+            }
+
+            setMensagemCadastro(resultado.mensagem);
+            setErro("");
+            setCarregando(true);
+            setPagina(1);
+            setVersaoLista(anterior => anterior + 1);
+        } catch (erro) {
+            window.alert(erro instanceof Error ? erro.message : "Erro ao excluir o serviço.");
         } finally {
             setSalvando(false);
         }
@@ -272,6 +302,14 @@ export function Servicos() {
                                                     }}
                                                 >
                                                     Editar
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-outline-danger btn-sm ms-2"
+                                                    disabled={salvando}
+                                                    onClick={() => confirmarExclusao(servico)}
+                                                >
+                                                    Excluir
                                                 </button>
                                             </td>
                                         </tr>
