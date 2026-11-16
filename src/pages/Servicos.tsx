@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type SubmitEvent } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { listarServicos, type Servico } from "../services/api";
+import { cadastrarServico, listarServicos, type Servico } from "../services/api";
 import "../styles/servicos.css";
 
 const moeda = new Intl.NumberFormat("pt-BR", {
@@ -17,6 +17,10 @@ export function Servicos() {
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
     const [cadastroAberto, setCadastroAberto] = useState(false);
+    const [salvando, setSalvando] = useState(false);
+    const [erroCadastro, setErroCadastro] = useState("");
+    const [mensagemCadastro, setMensagemCadastro] = useState("");
+    const [versaoLista, setVersaoLista] = useState(0);
 
     useEffect(() => {
         if (!token) return;
@@ -45,7 +49,58 @@ export function Servicos() {
         return () => {
             ativo = false;
         };
-    }, [pagina, token]);
+    }, [pagina, token, versaoLista]);
+
+    async function salvarServico(evento: SubmitEvent<HTMLFormElement>) {
+        evento.preventDefault();
+        if (!token || salvando) return;
+
+        const formulario = evento.currentTarget;
+        const campos = new FormData(formulario);
+        const nome = String(campos.get("nome") ?? "").trim();
+        const slug = nome
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "");
+
+        setErroCadastro("");
+        setMensagemCadastro("");
+
+        if (!slug) {
+            setErroCadastro("Inclua uma letra ou um número no nome do serviço.");
+            return;
+        }
+
+        setSalvando(true);
+
+        try {
+            const resultado = await cadastrarServico(token, {
+                nome,
+                slug,
+                categoria: String(campos.get("categoria") ?? ""),
+                preco: String(campos.get("preco") ?? ""),
+                descricao: String(campos.get("descricao") ?? "").trim(),
+                video: String(campos.get("video") ?? "").trim() || null,
+                ativo: 1
+            });
+
+            formulario.reset();
+            setCadastroAberto(false);
+            setMensagemCadastro(resultado.mensagem);
+            setErro("");
+            setCarregando(true);
+            setPagina(1);
+            setVersaoLista(anterior => anterior + 1);
+        } catch (erro) {
+            setErroCadastro(
+                erro instanceof Error ? erro.message : "Erro ao cadastrar o serviço."
+            );
+        } finally {
+            setSalvando(false);
+        }
+    }
 
     function mudarPagina(novaPagina: number) {
         setCarregando(true);
@@ -72,7 +127,7 @@ export function Servicos() {
                 {cadastroAberto ? "Fechar cadastro" : "Novo serviço"}
             </button>
 
-            <section id="cadastro-servico" hidden={!cadastroAberto} className="mb-4">
+            <form id="cadastro-servico" hidden={!cadastroAberto} className="mb-4" onSubmit={salvarServico}>
                 <h2 className="h4 mb-3">Cadastrar serviço</h2>
 
                 <label htmlFor="nome-servico" className="form-label">
@@ -135,7 +190,23 @@ export function Servicos() {
                     className="form-control"
                 />
 
-            </section>
+                {erroCadastro && (
+                    <p role="alert" className="alert alert-danger mt-3">
+                        {erroCadastro}
+                    </p>
+                )}
+
+                <button type="submit" className="btn btn-danger mt-3" disabled={salvando}>
+                    {salvando ? "Salvando..." : "Salvar serviço"}
+                </button>
+
+            </form>
+
+            {mensagemCadastro && (
+                <p role="status" className="alert alert-success">
+                    {mensagemCadastro}
+                </p>
+            )}
 
             {carregando && <p role="status">Carregando serviços...</p>}
             {erro && <p className="alert alert-danger" role="alert">{erro}</p>}
