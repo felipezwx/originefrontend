@@ -237,3 +237,32 @@ export async function cadastrarServico(
 
     return resultado;
 }
+
+export async function atualizarServico(
+    token: string,
+    id: number,
+    dados: DadosNovoServico
+): Promise<{ mensagem: string }> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/servicos/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao atualizar o serviço.");
+    }
+
+    return resultado;
+}

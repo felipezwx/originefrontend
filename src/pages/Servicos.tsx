@@ -1,6 +1,6 @@
 import { useEffect, useState, type SubmitEvent } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { cadastrarServico, listarServicos, type Servico } from "../services/api";
+import { atualizarServico, cadastrarServico, listarServicos, type Servico } from "../services/api";
 import "../styles/servicos.css";
 
 const moeda = new Intl.NumberFormat("pt-BR", {
@@ -21,6 +21,7 @@ export function Servicos() {
     const [erroCadastro, setErroCadastro] = useState("");
     const [mensagemCadastro, setMensagemCadastro] = useState("");
     const [versaoLista, setVersaoLista] = useState(0);
+    const [servicoEmEdicao, setServicoEmEdicao] = useState<Servico | null>(null);
 
     useEffect(() => {
         if (!token) return;
@@ -76,22 +77,28 @@ export function Servicos() {
         setSalvando(true);
 
         try {
-            const resultado = await cadastrarServico(token, {
-                nome,
-                slug,
-                categoria: String(campos.get("categoria") ?? ""),
-                preco: String(campos.get("preco") ?? ""),
-                descricao: String(campos.get("descricao") ?? "").trim(),
-                video: String(campos.get("video") ?? "").trim() || null,
-                ativo: 1
-            });
+
+            const dados = {
+                    nome,
+                    slug: servicoEmEdicao?.slug ?? slug,
+                    categoria: String(campos.get("categoria") ?? ""),
+                    preco: String(campos.get("preco") ?? ""),
+                    descricao: String(campos.get("descricao") ?? "").trim(),
+                    video: String(campos.get("video") ?? "").trim() || null,
+                    ativo: servicoEmEdicao?.ativo ?? 1
+                };
+
+            const resultado = servicoEmEdicao
+                ? await atualizarServico(token, servicoEmEdicao.id, dados)
+                : await cadastrarServico(token, dados);
 
             formulario.reset();
             setCadastroAberto(false);
             setMensagemCadastro(resultado.mensagem);
             setErro("");
             setCarregando(true);
-            setPagina(1);
+            if (!servicoEmEdicao) setPagina(1);
+            setServicoEmEdicao(null);
             setVersaoLista(anterior => anterior + 1);
         } catch (erro) {
             setErroCadastro(
@@ -122,13 +129,21 @@ export function Servicos() {
                 className="btn btn-outline-light mb-3"
                 aria-expanded={cadastroAberto}
                 aria-controls="cadastro-servico"
-                onClick={() => setCadastroAberto(!cadastroAberto)}
+                disabled={salvando}
+                onClick={() => {
+                    setServicoEmEdicao(null);
+                    setCadastroAberto(!cadastroAberto);
+                    setErroCadastro("");
+                    setMensagemCadastro("");
+                }}
             >
-                {cadastroAberto ? "Fechar cadastro" : "Novo serviço"}
+                {cadastroAberto ? "Fechar Formulário" : "Novo serviço"}
             </button>
 
-            <form id="cadastro-servico" hidden={!cadastroAberto} className="mb-4" onSubmit={salvarServico}>
-                <h2 className="h4 mb-3">Cadastrar serviço</h2>
+            <form key={servicoEmEdicao?.id ?? "novo"} id="cadastro-servico" hidden={!cadastroAberto} className="mb-4" onSubmit={salvarServico}>
+                <h2 className="h4 mb-3">
+                    {servicoEmEdicao ? "Editar serviço" : "Cadastrar serviço"}
+                </h2>
 
                 <label htmlFor="nome-servico" className="form-label">
                     Nome do serviço
@@ -136,6 +151,7 @@ export function Servicos() {
                 <input
                     id="nome-servico"
                     name="nome"
+                    defaultValue={servicoEmEdicao?.nome ?? ""}
                     type="text"
                     className="form-control"
                     maxLength={100}
@@ -145,7 +161,7 @@ export function Servicos() {
                 <label htmlFor="categoria-servico" className="form-label mt-3">
                     Categoria
                 </label>
-                <select id="categoria-servico" name="categoria" className="form-select" defaultValue="" required>
+                <select id="categoria-servico" name="categoria" className="form-select" defaultValue={servicoEmEdicao?.categoria ?? ""} required>
                     <option value="" disabled>Selecione uma categoria</option>
                     <option value="comercial">Comercial</option>
                     <option value="artistico">Artístico</option>
@@ -159,6 +175,7 @@ export function Servicos() {
                 <input
                     id="preco-servico"
                     name="preco"
+                    defaultValue={servicoEmEdicao?.preco ?? ""}
                     type="number"
                     min="0"
                     max="99999999.99"
@@ -173,6 +190,7 @@ export function Servicos() {
                 <textarea
                     id="descricao-servico"
                     name="descricao"
+                    defaultValue={servicoEmEdicao?.descricao ?? ""}
                     rows={3}
                     className="form-control"
                     required
@@ -184,6 +202,7 @@ export function Servicos() {
                 <input
                     id="video-servico"
                     name="video"
+                    defaultValue={servicoEmEdicao?.video ?? ""}
                     type="text"
                     maxLength={255}
                     placeholder="videos/txt.mp4"
@@ -225,6 +244,7 @@ export function Servicos() {
                                         <th scope="col">Categoria</th>
                                         <th scope="col">Preço</th>
                                         <th scope="col">Status</th>
+                                        <th scope="col">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -238,6 +258,21 @@ export function Servicos() {
                                                 <span className={servico.ativo === 1 ? "status-ativo" : "status-inativo"}>
                                                     {servico.ativo === 1 ? "Ativo" : "Inativo"}
                                                 </span>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-outline-light btn-sm"
+                                                    disabled={salvando}
+                                                    onClick={() => {
+                                                        setServicoEmEdicao(servico);
+                                                        setCadastroAberto(true);
+                                                        setErroCadastro("");
+                                                        setMensagemCadastro("");
+                                                    }}
+                                                >
+                                                    Editar
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
