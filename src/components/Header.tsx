@@ -65,6 +65,18 @@ export function Header() {
                             </Link>
                         </li>
 
+                        {usuario?.tipo === "admin" && (
+                            <li className="nav-item">
+                                <Link
+                                    className="nav-link link-nav"
+                                    to="/painel"
+                                    onClick={() => setMenuAberto(false)}
+                                >
+                                    Painel
+                                </Link>
+                            </li>
+                        )}
+
                         <li className="nav-item ms-lg-2">
 
                             {usuario ? (
