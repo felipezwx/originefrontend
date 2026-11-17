@@ -58,6 +58,26 @@ type DadosEdicaoPerfil = {
 
 type DadosNovoServico = Omit<Servico, "id">;
 
+export type Orcamento = {
+    id: number;
+    id_cliente: number;
+    nome_cliente: string;
+    email_cliente: string;
+    telefone_cliente: string | null;
+    servico: string | null;
+    mensagem: string;
+    status: string;
+    criado_em: string;
+};
+
+type RespostaOrcamentos = {
+    pagina: number;
+    limite: number;
+    total: number;
+    totalPaginas: number;
+    dados: Orcamento[];
+};
+
 export async function cadastrarUsuario(dados: DadosCadastro): Promise<RespostaCadastro> {
     let resposta: Response;
 
@@ -316,4 +336,29 @@ export async function consultarServico(
     }
 
     return resultado.servico;
+}
+
+export async function listarOrcamentos(
+    token: string,
+    pagina: number = 1
+): Promise<RespostaOrcamentos> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/orcamentos?pagina=${pagina}&limite=10`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao listar os orçamentos.");
+    }
+
+    return resultado;
 }

@@ -1,0 +1,130 @@
+import { useEffect, useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import { listarOrcamentos, type Orcamento } from "../services/api";
+import "../styles/servicos.css";
+
+export function OrcamentosAdmin() {
+    const token = localStorage.getItem("token");
+
+    const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]);
+    const [pagina, setPagina] = useState(1);
+    const [totalPaginas, setTotalPaginas] = useState(0);
+    const [carregando, setCarregando] = useState(true);
+    const [erro, setErro] = useState("");
+
+    useEffect(() => {
+        if (!token) return;
+
+        let ativo = true;
+
+        listarOrcamentos(token, pagina)
+            .then((resultado) => {
+                if (ativo) {
+                    setOrcamentos(resultado.dados);
+                    setTotalPaginas(resultado.totalPaginas);
+                }
+            })
+            .catch((erro) => {
+                if (ativo) {
+                    setErro(
+                        erro instanceof Error
+                            ? erro.message
+                            : "Erro ao carregar os orçamentos."
+                    );
+                }
+            })
+            .finally(() => {
+                if (ativo) setCarregando(false);
+            });
+
+        return () => {
+            ativo = false;
+        };
+    }, [token, pagina]);
+
+    function mudarPagina(novaPagina: number) {
+        setErro("");
+        setCarregando(true);
+        setPagina(novaPagina);
+    }
+
+    if (!token) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return (
+        <main className="pagina-servicos container py-4">
+            <Link to="/painel">Voltar ao painel</Link>
+
+            <div className="cabecalho-servicos">
+                <h1>Orçamentos</h1>
+            </div>
+
+            {carregando && <p role="status">Carregando orçamentos...</p>}
+            {erro && <p role="alert" className="alert alert-danger">{erro}</p>}
+
+            {!carregando && !erro && (
+                <>
+                    {orcamentos.length === 0 ? (
+                        <p>Nenhum orçamento encontrado.</p>
+                    ) : (
+                        <div className="table-responsive painel-tabela">
+                            <table className="table align-middle tabela-admin">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Cliente</th>
+                                        <th scope="col">Serviço</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {orcamentos.map((orcamento) => (
+                                        <tr key={orcamento.id}>
+                                            <td>{orcamento.id}</td>
+                                            <td>{orcamento.nome_cliente}</td>
+                                            <td>{orcamento.servico || "Não informado"}</td>
+                                            <td>{orcamento.status}</td>
+                                            <td>
+                                                {new Date(orcamento.criado_em)
+                                                    .toLocaleDateString("pt-BR")}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </>
+            )}
+
+            {!erro && totalPaginas > 1 && (
+                <nav
+                    aria-label="Paginação de orçamentos"
+                    className="d-flex align-items-center gap-3 mt-3"
+                >
+                    <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        disabled={carregando || pagina === 1}
+                        onClick={() => mudarPagina(pagina - 1)}
+                    >
+                        Anterior
+                    </button>
+
+                    <span>Página {pagina} de {totalPaginas}</span>
+
+                    <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        disabled={carregando || pagina >= totalPaginas}
+                        onClick={() => mudarPagina(pagina + 1)}
+                    >
+                        Próxima
+                    </button>
+                </nav>
+            )}
+        </main>
+    );
+}

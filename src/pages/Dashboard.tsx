@@ -45,6 +45,14 @@ export function Dashboard() {
                     Ver serviços →
                 </Link>
             </section>
+
+            <Link
+                to="/painel/orcamentos"
+                className="btn btn-outline-light mt-3"
+            >
+                Ver orçamentos
+            </Link>
+            
         </main>
     );
 }

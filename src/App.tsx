@@ -8,6 +8,7 @@ import { Catalogo } from "./pages/Catalogo";
 import { Orcamento } from "./pages/Orcamento";
 import { MinhaConta } from "./pages/MinhaConta";
 import { Dashboard } from "./pages/Dashboard";
+import { OrcamentosAdmin } from "./pages/OrcamentosAdmin";
 import { useEffect, useState } from "react";
 import { UsuarioContext } from "./UsuarioContext";
 import { consultarPerfil, type Usuario } from "./services/api";
@@ -67,6 +68,7 @@ function App() {
                     <Route path="servicos" element={<Servicos />} />
                     <Route path="servicos/novo" element={<FormularioServico />} />
                     <Route path="servicos/:id/editar" element={<FormularioServico />} />
+                    <Route path="orcamentos" element={<OrcamentosAdmin />} />
                 </Route>
                 <Route path="/orcamento" element={<Orcamento />} />
                 <Route path="/minha-conta" element={<MinhaConta />} />
