@@ -58,6 +58,9 @@ export function OrcamentosAdmin() {
 
             <div className="cabecalho-servicos">
                 <h1>Orçamentos</h1>
+                <Link to="/painel/orcamentos/novo" className="btn btn-danger">
+                    Novo orçamento
+                </Link>
             </div>
 
             {carregando && <p role="status">Carregando orçamentos...</p>}
@@ -77,6 +80,7 @@ export function OrcamentosAdmin() {
                                         <th scope="col">Serviço</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Data</th>
+                                        <th scope="col">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -89,6 +93,14 @@ export function OrcamentosAdmin() {
                                             <td>
                                                 {new Date(orcamento.criado_em)
                                                     .toLocaleDateString("pt-BR")}
+                                            </td>
+                                            <td>
+                                                <Link
+                                                    to={`/painel/orcamentos/${orcamento.id}/editar`}
+                                                    className="btn btn-outline-light btn-sm"
+                                                >
+                                                    Editar
+                                                </Link>
                                             </td>
                                         </tr>
                                     ))}

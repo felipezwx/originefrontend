@@ -78,6 +78,33 @@ type RespostaOrcamentos = {
     dados: Orcamento[];
 };
 
+export type Cliente = {
+    id: number;
+    nome: string;
+    email: string;
+    telefone: string | null;
+};
+
+type RespostaClientes = {
+    pagina: number;
+    limite: number;
+    total: number;
+    totalPaginas: number;
+    dados: Cliente[];
+};
+
+export type DadosOrcamento = {
+    id_cliente: number;
+    servicosIds: number[];
+    mensagem: string;
+    status: string;
+};
+
+type DetalhesOrcamento = {
+    orcamento: Orcamento;
+    servicos: { id: number; nome: string }[];
+};
+
 export async function cadastrarUsuario(dados: DadosCadastro): Promise<RespostaCadastro> {
     let resposta: Response;
 
@@ -358,6 +385,89 @@ export async function listarOrcamentos(
 
     if (!resposta.ok) {
         throw new Error(resultado.mensagem || "Erro ao listar os orçamentos.");
+    }
+
+    return resultado;
+}
+
+export async function listarClientes(
+    token: string,
+    pagina: number = 1
+): Promise<RespostaClientes> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/clientes?pagina=${pagina}&limite=10`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao listar os clientes.");
+    }
+
+    return resultado;
+}
+
+export async function consultarOrcamento(
+    token: string,
+    id: number
+): Promise<DetalhesOrcamento> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/orcamentos/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao consultar o orçamento.");
+    }
+
+    return resultado;
+}
+
+export async function salvarOrcamento(
+    token: string,
+    dados: DadosOrcamento,
+    id?: number
+): Promise<{ mensagem: string }> {
+    const caminho = id === undefined
+        ? "/api/orcamentos"
+        : `/api/orcamentos/${id}`;
+
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}${caminho}`, {
+            method: id === undefined ? "POST" : "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao salvar o orçamento.");
     }
 
     return resultado;
