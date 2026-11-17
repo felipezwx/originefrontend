@@ -292,3 +292,28 @@ export async function excluirServico(
 
     return resultado;
 }
+
+export async function consultarServico(
+    token: string,
+    id: number
+): Promise<Servico> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/servicos/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao consultar o serviço.");
+    }
+
+    return resultado.servico;
+}

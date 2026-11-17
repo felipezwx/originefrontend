@@ -3,6 +3,7 @@ import { Index } from "./pages/Index";
 import { Login } from "./pages/Login";
 import { Cadastro } from "./pages/Cadastro";
 import { Servicos } from "./pages/Servicos";
+import { FormularioServico } from "./pages/FormularioServico";
 import { Catalogo } from "./pages/Catalogo";
 import { Orcamento } from "./pages/Orcamento";
 import { MinhaConta } from "./pages/MinhaConta";
@@ -64,6 +65,8 @@ function App() {
                 >
                     <Route index element={<Dashboard />} />
                     <Route path="servicos" element={<Servicos />} />
+                    <Route path="servicos/novo" element={<FormularioServico />} />
+                    <Route path="servicos/:id/editar" element={<FormularioServico />} />
                 </Route>
                 <Route path="/orcamento" element={<Orcamento />} />
                 <Route path="/minha-conta" element={<MinhaConta />} />
