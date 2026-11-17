@@ -105,6 +105,8 @@ type DetalhesOrcamento = {
     servicos: { id: number; nome: string }[];
 };
 
+export type DadosCliente = Omit<Cliente, "id">;
+
 export async function cadastrarUsuario(dados: DadosCadastro): Promise<RespostaCadastro> {
     let resposta: Response;
 
@@ -494,6 +496,90 @@ export async function excluirOrcamento(
 
     if (!resposta.ok) {
         throw new Error(resultado.mensagem || "Erro ao excluir o orçamento.");
+    }
+
+    return resultado;
+}
+
+export async function consultarCliente(
+    token: string,
+    id: number
+): Promise<Cliente> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/clientes/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao consultar o cliente.");
+    }
+
+    return resultado.cliente;
+}
+
+export async function salvarCliente(
+    token: string,
+    dados: DadosCliente,
+    id?: number
+): Promise<{ mensagem: string; cliente: Cliente }> {
+    const caminho = id === undefined
+        ? "/api/clientes"
+        : `/api/clientes/${id}`;
+
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}${caminho}`, {
+            method: id === undefined ? "POST" : "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao salvar o cliente.");
+    }
+
+    return resultado;
+}
+
+export async function excluirCliente(
+    token: string,
+    id: number
+): Promise<{ mensagem: string }> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/clientes/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao excluir o cliente.");
     }
 
     return resultado;
