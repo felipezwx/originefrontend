@@ -472,3 +472,29 @@ export async function salvarOrcamento(
 
     return resultado;
 }
+
+export async function excluirOrcamento(
+    token: string,
+    id: number
+): Promise<{ mensagem: string }> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/orcamentos/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao excluir o orçamento.");
+    }
+
+    return resultado;
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { listarOrcamentos, type Orcamento } from "../services/api";
+import { excluirOrcamento, listarOrcamentos, type Orcamento } from "../services/api";
 import "../styles/servicos.css";
 
 export function OrcamentosAdmin() {
@@ -11,6 +11,10 @@ export function OrcamentosAdmin() {
     const [totalPaginas, setTotalPaginas] = useState(0);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
+    const [excluindo, setExcluindo] = useState(false);
+    const [erroExclusao, setErroExclusao] = useState("");
+    const [mensagem, setMensagem] = useState("");
+    const [versaoLista, setVersaoLista] = useState(0);
 
     useEffect(() => {
         if (!token) return;
@@ -40,7 +44,37 @@ export function OrcamentosAdmin() {
         return () => {
             ativo = false;
         };
-    }, [token, pagina]);
+    }, [token, pagina, versaoLista]);
+
+    async function confirmarExclusao(orcamento: Orcamento) {
+        if (!token || excluindo) return;
+
+        const confirmou = window.confirm(
+            `Excluir o orçamento ${orcamento.id} de ${orcamento.nome_cliente}?`
+        );
+
+        if (!confirmou) return;
+
+        setExcluindo(true);
+        setErroExclusao("");
+        setMensagem("");
+
+        try {
+            const resultado = await excluirOrcamento(token, orcamento.id);
+
+            setMensagem(resultado.mensagem);
+            setErro("");
+            setCarregando(true);
+            setPagina(1);
+            setVersaoLista(anterior => anterior + 1);
+        } catch (erro) {
+            setErroExclusao(
+                erro instanceof Error ? erro.message : "Erro ao excluir o orçamento."
+            );
+        } finally {
+            setExcluindo(false);
+        }
+    }
 
     function mudarPagina(novaPagina: number) {
         setErro("");
@@ -62,6 +96,14 @@ export function OrcamentosAdmin() {
                     Novo orçamento
                 </Link>
             </div>
+
+            {mensagem && (
+                <p role="status" className="alert alert-success">{mensagem}</p>
+            )}
+
+            {erroExclusao && (
+                <p role="alert" className="alert alert-danger">{erroExclusao}</p>
+            )}
 
             {carregando && <p role="status">Carregando orçamentos...</p>}
             {erro && <p role="alert" className="alert alert-danger">{erro}</p>}
@@ -101,6 +143,14 @@ export function OrcamentosAdmin() {
                                                 >
                                                     Editar
                                                 </Link>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-outline-danger btn-sm ms-2"
+                                                    disabled={excluindo || carregando}
+                                                    onClick={() => confirmarExclusao(orcamento)}
+                                                >
+                                                    Excluir
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
@@ -119,7 +169,7 @@ export function OrcamentosAdmin() {
                     <button
                         type="button"
                         className="btn btn-outline-secondary"
-                        disabled={carregando || pagina === 1}
+                        disabled={carregando || excluindo || pagina === 1}
                         onClick={() => mudarPagina(pagina - 1)}
                     >
                         Anterior
@@ -130,7 +180,7 @@ export function OrcamentosAdmin() {
                     <button
                         type="button"
                         className="btn btn-outline-secondary"
-                        disabled={carregando || pagina >= totalPaginas}
+                        disabled={carregando || excluindo || pagina >= totalPaginas}
                         onClick={() => mudarPagina(pagina + 1)}
                     >
                         Próxima
