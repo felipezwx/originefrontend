@@ -1,0 +1,254 @@
+body:has(.pagina-dashboard) {
+    display: block;
+    margin: 0;
+    padding: 0;
+    background: #101010;
+}
+
+#root:has(.pagina-dashboard) {
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    text-align: left;
+}
+
+.pagina-dashboard {
+    min-height: 100vh;
+    background: #101010;
+    color: #f4f4f4;
+    font-family: "Inter", sans-serif;
+}
+
+.pagina-dashboard .dashboard-largura {
+    width: min(1180px, calc(100% - 48px));
+    margin-inline: auto;
+}
+
+.pagina-dashboard .dashboard-barra {
+    background: #141414;
+    border-bottom: 1px solid #2b2b2b;
+}
+
+.pagina-dashboard .dashboard-barra-conteudo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 88px;
+    padding-block: 18px;
+}
+
+.pagina-dashboard .dashboard-logo {
+    display: block;
+    width: 145px;
+    height: auto;
+}
+
+.pagina-dashboard .dashboard-barra nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.pagina-dashboard .dashboard-barra nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: #c8c8c8;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.pagina-dashboard .dashboard-barra nav a:hover {
+    color: #fff;
+}
+
+.pagina-dashboard .dashboard-conteudo {
+    padding-block: 64px;
+}
+
+.pagina-dashboard .dashboard-introducao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 36px;
+}
+
+.pagina-dashboard h1 {
+    margin: 0 0 12px;
+    color: #fff;
+    font-family: inherit;
+    font-size: clamp(26px, 3.5vw, 40px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+.pagina-dashboard .dashboard-introducao p {
+    margin: 0;
+    max-width: 520px;
+    color: #aaa;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.pagina-dashboard .dashboard-botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-shrink: 0;
+    padding: 14px 20px;
+    border: 1px solid #d93b2b;
+    border-radius: 8px;
+    background: #b72b1d;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 160ms ease;
+}
+
+.pagina-dashboard .dashboard-botao:hover {
+    background: #d03525;
+}
+
+.pagina-dashboard .dashboard-grade {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.pagina-dashboard .dashboard-cartao {
+    display: block;
+    padding: 28px;
+    border: 1px solid #303030;
+    border-radius: 12px;
+    background: #191919;
+    color: #f4f4f4;
+    text-decoration: none;
+    transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.pagina-dashboard .dashboard-cartao:hover {
+    border-color: #a7463c;
+    background: #201b1a;
+}
+
+.pagina-dashboard .dashboard-cartao-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.pagina-dashboard .dashboard-icone {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: #34201d;
+    color: #ff9385;
+    font-size: 23px;
+}
+
+.pagina-dashboard .dashboard-seta {
+    color: #999;
+    font-size: 20px;
+}
+
+.pagina-dashboard .dashboard-cartao:hover .dashboard-seta {
+    color: #ff9385;
+}
+
+.pagina-dashboard .dashboard-cartao h2 {
+    margin: 0 0 10px;
+    color: #f4f4f4;
+    font-family: inherit;
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.pagina-dashboard .dashboard-cartao p {
+    margin: 0;
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.pagina-dashboard .dashboard-resumo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid #292929;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.pagina-dashboard .dashboard-resumo p {
+    margin: 0;
+}
+
+.pagina-dashboard .dashboard-resumo strong {
+    color: #eee;
+}
+
+.pagina-dashboard a:focus-visible {
+    outline: 3px solid #ff9385;
+    outline-offset: 5px;
+}
+
+@media (max-width: 760px) {
+    .pagina-dashboard .dashboard-introducao {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pagina-dashboard .dashboard-conteudo {
+        padding-block: 36px;
+    }
+}
+
+@media (max-width: 520px) {
+    .pagina-dashboard .dashboard-largura {
+        width: calc(100% - 32px);
+    }
+
+    .pagina-dashboard .dashboard-grade {
+        grid-template-columns: 1fr;
+    }
+
+    .pagina-dashboard .dashboard-barra-conteudo {
+        flex-wrap: wrap;
+    }
+
+    .pagina-dashboard .dashboard-barra nav {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .pagina-dashboard .dashboard-cartao {
+        padding: 22px;
+    }
+
+    .pagina-dashboard .dashboard-botao {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pagina-dashboard .dashboard-cartao,
+    .pagina-dashboard .dashboard-botao {
+        transition: none;
+    }
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listarServicos } from "../services/api";
+import "../styles/dashboard.css";
 
 export function Dashboard() {
     const [total, setTotal] = useState<number | null>(null);
@@ -26,47 +27,108 @@ export function Dashboard() {
     }, []);
 
     return (
-        <main className="container py-5">
-            <Link to="/">Voltar ao site</Link>
-            <h1 className="my-4">Painel administrativo</h1>
+        <div className="pagina-dashboard">
+            <header className="dashboard-barra">
+                <div className="dashboard-largura dashboard-barra-conteudo">
+                    <Link to="/" aria-label="Originie — voltar ao site">
+                        <img
+                            src="/imagens/logo.png"
+                            alt="Originie"
+                            className="dashboard-logo"
+                        />
+                    </Link>
 
-            <section className="card bg-dark text-light border-secondary p-4">
-                <h2 className="h5">Total de serviços</h2>
+                    <nav aria-label="Navegação do administrador">
+                        <Link to="/">Ver site</Link>
+                        <Link to="/minha-conta">
+                            <i className="bi bi-person-circle" aria-hidden="true"></i>
+                            Minha conta
+                        </Link>
+                    </nav>
+                </div>
+            </header>
 
-                {erro ? (
-                    <p role="alert">{erro}</p>
-                ) : total === null ? (
-                    <p role="status">Carregando...</p>
-                ) : (
-                    <p className="display-5 fw-bold">{total}</p>
-                )}
+            <main className="dashboard-largura dashboard-conteudo">
+                <div className="dashboard-introducao">
+                    <div>
+                        <h1>Painel administrativo</h1>
+                        <p>Gerencie os clientes e acompanhe cada trabalho até a entrega.</p>
+                    </div>
 
-                <Link to="/painel/servicos" className="link-light">
-                    Ver serviços →
-                </Link>
-            </section>
+                    <Link
+                        to="/painel/orcamentos/novo"
+                        className="dashboard-botao"
+                    >
+                        <i className="bi bi-plus-lg" aria-hidden="true"></i>
+                        Novo orçamento
+                    </Link>
+                </div>
 
-            <Link
-                to="/painel/orcamentos"
-                className="btn btn-outline-light mt-3"
-            >
-                Ver orçamentos
-            </Link>
+                <nav className="dashboard-grade" aria-label="Áreas do painel">
+                    {[
+                        {
+                            titulo: "Serviços",
+                            descricao: "Organize o catálogo, os preços e as descrições.",
+                            caminho: "/painel/servicos",
+                            icone: "bi-camera-video"
+                        },
+                        {
+                            titulo: "Orçamentos",
+                            descricao: "Consulte os pedidos e atualize o andamento.",
+                            caminho: "/painel/orcamentos",
+                            icone: "bi-file-earmark-text"
+                        },
+                        {
+                            titulo: "Clientes",
+                            descricao: "Cadastre clientes e mantenha os contatos atualizados.",
+                            caminho: "/painel/clientes",
+                            icone: "bi-people"
+                        },
+                        {
+                            titulo: "Projetos finalizados",
+                            descricao: "Confira as entregas, os valores e as datas de conclusão.",
+                            caminho: "/painel/projetos",
+                            icone: "bi-check2-circle"
+                        }
+                    ].map(area => (
+                        <Link
+                            key={area.caminho}
+                            to={area.caminho}
+                            className="dashboard-cartao"
+                        >
+                            <span className="dashboard-cartao-topo">
+                                <i
+                                    className={`bi ${area.icone} dashboard-icone`}
+                                    aria-hidden="true"
+                                ></i>
+                                <i
+                                    className="bi bi-arrow-up-right dashboard-seta"
+                                    aria-hidden="true"
+                                ></i>
+                            </span>
 
-            <Link
-                to="/painel/clientes"
-                className="btn btn-outline-light mt-3 ms-2"
-            >
-                Ver clientes
-            </Link>
+                            <h2>{area.titulo}</h2>
+                            <p>{area.descricao}</p>
+                        </Link>
+                    ))}
+                </nav>
 
-            <Link
-                to="/painel/projetos"
-                className="btn btn-outline-light mt-3 ms-2"
-            >
-                Ver projetos
-            </Link>
+                <div className="dashboard-resumo">
+                    <i className="bi bi-camera-video" aria-hidden="true"></i>
 
-        </main>
+                    {erro ? (
+                        <p role="alert">{erro}</p>
+                    ) : total === null ? (
+                        <p role="status">Consultando o catálogo...</p>
+                    ) : (
+                        <p>
+                            <strong>{total}</strong>
+                            {" "}{total === 1 ? "serviço cadastrado" : "serviços cadastrados"}
+                            {" "}no catálogo.
+                        </p>
+                    )}
+                </div>
+            </main>
+        </div>
     );
 }
