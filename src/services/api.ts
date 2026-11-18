@@ -107,6 +107,38 @@ type DetalhesOrcamento = {
 
 export type DadosCliente = Omit<Cliente, "id">;
 
+export type Projeto = {
+    id: number;
+    id_contato: number;
+    valor_final: string;
+    data_conclusao: string;
+    observacao: string | null;
+    criado_em: string;
+    servico: string | null;
+    status: string;
+    id_cliente: number;
+    nome_cliente: string;
+    email_cliente: string;
+};
+
+export type DadosProjeto = {
+    valor_final: string;
+    data_conclusao: string;
+    observacao: string | null;
+};
+
+export type DadosNovoProjeto = DadosProjeto & {
+    id_contato: number;
+};
+
+type RespostaProjetos = {
+    pagina: number;
+    limite: number;
+    total: number;
+    totalPaginas: number;
+    dados: Projeto[];
+};
+
 export async function cadastrarUsuario(dados: DadosCadastro): Promise<RespostaCadastro> {
     let resposta: Response;
 
@@ -580,6 +612,139 @@ export async function excluirCliente(
 
     if (!resposta.ok) {
         throw new Error(resultado.mensagem || "Erro ao excluir o cliente.");
+    }
+
+    return resultado;
+}
+
+export async function listarProjetos(
+    token: string,
+    pagina: number = 1
+): Promise<RespostaProjetos> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/projetos?pagina=${pagina}&limite=10`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao listar os projetos.");
+    }
+
+    return resultado;
+}
+
+export async function consultarProjeto(
+    token: string,
+    id: number
+): Promise<Projeto> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/projetos/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao consultar o projeto.");
+    }
+
+    return resultado.projeto;
+}
+
+export async function cadastrarProjeto(
+    token: string,
+    dados: DadosNovoProjeto
+): Promise<{ mensagem: string }> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/projetos`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao cadastrar o projeto.");
+    }
+
+    return resultado;
+}
+
+export async function atualizarProjeto(
+    token: string,
+    id: number,
+    dados: DadosProjeto
+): Promise<{ mensagem: string }> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/projetos/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao atualizar o projeto.");
+    }
+
+    return resultado;
+}
+
+export async function excluirProjeto(
+    token: string,
+    id: number
+): Promise<{ mensagem: string }> {
+    let resposta: Response;
+
+    try {
+        resposta = await fetch(`${API_URL}/api/projetos/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch {
+        throw new Error("Não foi possível conectar ao servidor.");
+    }
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(resultado.mensagem || "Erro ao excluir o projeto.");
     }
 
     return resultado;

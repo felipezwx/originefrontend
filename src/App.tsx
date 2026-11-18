@@ -12,6 +12,8 @@ import { OrcamentosAdmin } from "./pages/OrcamentosAdmin";
 import { FormularioOrcamento } from "./pages/FormularioOrcamento";
 import { ClientesAdmin } from "./pages/ClientesAdmin";
 import { FormularioCliente } from "./pages/FormularioCliente";
+import { ProjetosAdmin } from "./pages/ProjetosAdmin";
+import { FormularioProjeto } from "./pages/FormularioProjeto";
 import { useEffect, useState } from "react";
 import { UsuarioContext } from "./UsuarioContext";
 import { consultarPerfil, type Usuario } from "./services/api";
@@ -77,6 +79,9 @@ function App() {
                     <Route path="clientes" element={<ClientesAdmin />} />
                     <Route path="clientes/novo" element={<FormularioCliente />} />
                     <Route path="clientes/:id/editar" element={<FormularioCliente />} />
+                    <Route path="projetos" element={<ProjetosAdmin />} />
+                    <Route path="projetos/novo" element={<FormularioProjeto />} />
+                    <Route path="projetos/:id/editar" element={<FormularioProjeto />} />
                 </Route>
                 <Route path="/orcamento" element={<Orcamento />} />
                 <Route path="/minha-conta" element={<MinhaConta />} />

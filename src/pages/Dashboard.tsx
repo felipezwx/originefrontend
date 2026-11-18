@@ -59,6 +59,14 @@ export function Dashboard() {
             >
                 Ver clientes
             </Link>
+
+            <Link
+                to="/painel/projetos"
+                className="btn btn-outline-light mt-3 ms-2"
+            >
+                Ver projetos
+            </Link>
+
         </main>
     );
 }
