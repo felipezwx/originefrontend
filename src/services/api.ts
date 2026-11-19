@@ -139,72 +139,103 @@ type RespostaProjetos = {
     dados: Projeto[];
 };
 
-export async function cadastrarUsuario(dados: DadosCadastro): Promise<RespostaCadastro> {
+export type ServicoPublico = Omit<Servico, "ativo">;
+
+type RespostaServicosPublicos = Omit<RespostaServicos, "dados"> & {
+    dados: ServicoPublico[];
+};
+
+type RespostaMensagem = {
+    mensagem: string;
+};
+
+type OpcoesRequisicao = {
+    metodo?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+    token?: string;
+    dados?: unknown;
+    mensagemErro: string;
+};
+
+async function requisicao<T>(
+    caminho: string,
+    opcoes: OpcoesRequisicao
+): Promise<T> {
+    const headers = new Headers();
+
+    if (opcoes.token) {
+        headers.set("Authorization", `Bearer ${opcoes.token}`);
+    }
+
+    if (opcoes.dados !== undefined) {
+        headers.set("Content-Type", "application/json");
+    }
+
     let resposta: Response;
 
     try {
-        resposta = await fetch(`${API_URL}/api/auth/cadastro`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dados)
+        resposta = await fetch(`${API_URL}${caminho}`, {
+            method: opcoes.metodo ?? "GET",
+            headers,
+            body: opcoes.dados === undefined
+                ? undefined
+                : JSON.stringify(opcoes.dados)
         });
     } catch {
         throw new Error("Não foi possível conectar ao servidor.");
     }
 
-    const resultado = await resposta.json();
+    let resultado: unknown;
 
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao realizar cadastro.");
+    try {
+        resultado = await resposta.json();
+    } catch {
+        throw new Error(opcoes.mensagemErro);
     }
 
-    return resultado;
+    if (!resposta.ok) {
+        const mensagem =
+            typeof resultado === "object" &&
+            resultado !== null &&
+            "mensagem" in resultado &&
+            typeof resultado.mensagem === "string" &&
+            resultado.mensagem.length > 0
+                ? resultado.mensagem
+                : opcoes.mensagemErro;
+
+        throw new Error(mensagem);
+    }
+
+    return resultado as T;
 }
 
-export async function entrarUsuario(dados: DadosLogin): Promise<RespostaLogin> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/auth/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dados)
+export async function cadastrarUsuario(
+    dados: DadosCadastro
+): Promise<RespostaCadastro> {
+    return requisicao<RespostaCadastro>("/api/auth/cadastro", {
+            metodo: "POST",
+            dados,
+            mensagemErro: "Erro ao realizar cadastro."
         });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
+}
 
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao fazer login.");
-    }
-
-    return resultado;
+export async function entrarUsuario(
+    dados: DadosLogin
+): Promise<RespostaLogin> {
+    return requisicao<RespostaLogin>("/api/auth/login", {
+        metodo: "POST",
+        dados,
+        mensagemErro: "Erro ao fazer login."
+    });
 }
 
 export async function consultarPerfil(token: string): Promise<Usuario> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/auth/perfil`, {
-            headers: {
-                Authorization: `Bearer ${token}`
+    const resultado = await requisicao<{ usuario: Usuario }>(
+        "/api/auth/perfil", 
+        {
+            token,
+            mensagemErro: "Erro ao consultar o perfil."
             }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao consultar perfil.");
-    }
+        );
 
     return resultado.usuario;
 }
@@ -213,79 +244,39 @@ export async function listarServicos(
     token: string,
     pagina: number = 1
 ): Promise<RespostaServicos> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/servicos?pagina=${pagina}&limite=10`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao listar os serviços.");
-    }
-
-    return resultado;
+    return requisicao<RespostaServicos>(
+        `/api/servicos?pagina=${pagina}&limite=10`,
+        {
+            token,
+            mensagemErro: "Erro ao listar os serviços."
+        }
+    );
 }
-
-export type ServicoPublico = Omit<Servico, "ativo">;
-
-type RespostaServicosPublicos = Omit<RespostaServicos, "dados"> & {
-    dados: ServicoPublico[];
-};
 
 export async function listarServicosPublicos(
     pagina: number = 1
 ): Promise<RespostaServicosPublicos> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(
-            `${API_URL}/api/servicos/publicos?pagina=${pagina}&limite=10`
-        );
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao carregar o catálogo.");
-    }
-
-    return resultado;
+    return requisicao<RespostaServicosPublicos>(
+        `/api/servicos/publicos?pagina=${pagina}&limite=10`,
+        {
+            mensagemErro: "Erro ao carregar o catálogo."
+        }
+    );
 }
 
 export async function atualizarPerfil(
     token: string,
     dados: DadosEdicaoPerfil
 ): Promise<Usuario> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/auth/perfil`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(dados)
-        });
-    } catch {
-        throw new Error("Não foi possivel conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if(!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao atualizar o perfil.");
-    }
+    const resultado = await requisicao<{ usuario: Usuario }>(
+        "/api/auth/perfil", 
+        {
+            metodo: "PUT",
+            token,
+            dados,
+            mensagemErro: "Erro ao atualizar o perfil."
+        }
+    );
     
     return resultado.usuario;
 
@@ -295,28 +286,12 @@ export async function cadastrarServico(
     token: string,
     dados: DadosNovoServico
 ): Promise<{ id: number; mensagem: string }> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/servicos`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(dados)
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao cadastrar o serviço.");
-    }
-
-    return resultado;
+    return requisicao<{ id: number; mensagem: string }>("/api/servicos", {
+        metodo: "POST",
+        token,
+        dados,
+        mensagemErro: "Erro ao cadastrar o serviço."
+    });
 }
 
 export async function atualizarServico(
@@ -324,77 +299,36 @@ export async function atualizarServico(
     id: number,
     dados: DadosNovoServico
 ): Promise<{ mensagem: string }> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/servicos/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(dados)
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao atualizar o serviço.");
-    }
-
-    return resultado;
+    return requisicao<RespostaMensagem>(`/api/servicos/${id}`, {
+        metodo: "PUT",
+        token,
+        dados,
+        mensagemErro: "Erro ao atualizar serviço."
+    });
 }
 
 export async function excluirServico(
     token: string,
     id: number
-): Promise<{ mensagem: string }> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/servicos/${id}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao excluir o serviço.");
-    }
-
-    return resultado;
+): Promise<RespostaMensagem> {
+    return requisicao<RespostaMensagem>(`/api/servicos/${id}`, {
+        metodo: "DELETE",
+        token,
+        mensagemErro: "Erro ao excluir o serviço."
+    });
 }
 
 export async function consultarServico(
     token: string,
     id: number
 ): Promise<Servico> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/servicos/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao consultar o serviço.");
-    }
+    const resultado = await requisicao<{ servico: Servico }> (
+        `/api/servicos/${id}`,
+        {
+            token,
+            mensagemErro: "Erro ao consultar o serviço."
+        }
+    );
 
     return resultado.servico;
 }
@@ -403,157 +337,77 @@ export async function listarOrcamentos(
     token: string,
     pagina: number = 1
 ): Promise<RespostaOrcamentos> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/orcamentos?pagina=${pagina}&limite=10`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao listar os orçamentos.");
-    }
-
-    return resultado;
+    return requisicao<RespostaOrcamentos>(
+        `/api/orcamentos?pagina=${pagina}&limite=10`,
+        {
+            token,
+            mensagemErro: "Erro ao listar os orçamentos."
+        }
+    );
 }
 
 export async function listarClientes(
     token: string,
     pagina: number = 1
 ): Promise<RespostaClientes> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/clientes?pagina=${pagina}&limite=10`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao listar os clientes.");
-    }
-
-    return resultado;
+    return requisicao<RespostaClientes>(
+        `/api/clientes?pagina=${pagina}&limite=10`,
+        {
+            token,
+            mensagemErro: "Erro ao listar os clientes."
+        }
+    );
 }
 
 export async function consultarOrcamento(
     token: string,
     id: number
 ): Promise<DetalhesOrcamento> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/orcamentos/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao consultar o orçamento.");
-    }
-
-    return resultado;
+    return requisicao<DetalhesOrcamento>(`/api/orcamentos/${id}`, {
+        token,
+        mensagemErro: "Erro ao consultar o orçamento."
+    });
 }
 
 export async function salvarOrcamento(
     token: string,
     dados: DadosOrcamento,
     id?: number
-): Promise<{ mensagem: string }> {
+): Promise<RespostaMensagem> {
     const caminho = id === undefined
         ? "/api/orcamentos"
         : `/api/orcamentos/${id}`;
 
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}${caminho}`, {
-            method: id === undefined ? "POST" : "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(dados)
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao salvar o orçamento.");
-    }
-
-    return resultado;
+    return requisicao<RespostaMensagem>(caminho, {
+        metodo: id === undefined ? "POST" : "PUT",
+        token,
+        dados,
+        mensagemErro: "Erro ao salvar o orçamento."
+    });
 }
 
 export async function excluirOrcamento(
     token: string,
     id: number
-): Promise<{ mensagem: string }> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/orcamentos/${id}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao excluir o orçamento.");
-    }
-
-    return resultado;
+): Promise<RespostaMensagem> {
+    return requisicao<RespostaMensagem>(`/api/orcamentos/${id}`, {
+        metodo: "DELETE",
+        token,
+        mensagemErro: "Erro ao excluir o orçamento."
+    });
 }
 
 export async function consultarCliente(
     token: string,
     id: number
 ): Promise<Cliente> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/clientes/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao consultar o cliente.");
-    }
+    const resultado = await requisicao<{ cliente: Cliente}> (
+        `/api/clientes/${id}`,
+        {
+            token,
+            mensagemErro: "Erro ao consultar o cliente."
+        }
+    );
 
     return resultado.cliente;
 }
@@ -567,102 +421,49 @@ export async function salvarCliente(
         ? "/api/clientes"
         : `/api/clientes/${id}`;
 
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}${caminho}`, {
-            method: id === undefined ? "POST" : "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(dados)
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao salvar o cliente.");
-    }
-
-    return resultado;
+    return requisicao<{ mensagem: string; cliente: Cliente }> (caminho, {
+        metodo: id === undefined ? "POST" : "PUT",
+        token,
+        dados,
+        mensagemErro: "Erro ao salvar o cliente."
+    });
 }
 
 export async function excluirCliente(
     token: string,
     id: number
-): Promise<{ mensagem: string }> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/clientes/${id}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao excluir o cliente.");
-    }
-
-    return resultado;
+): Promise<RespostaMensagem> {
+    return requisicao<RespostaMensagem>(`/api/clientes/${id}`, {
+        metodo: "DELETE",
+        token,
+        mensagemErro: "Erro ao excluir o cliente."
+    });
 }
 
 export async function listarProjetos(
     token: string,
     pagina: number = 1
 ): Promise<RespostaProjetos> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/projetos?pagina=${pagina}&limite=10`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao listar os projetos.");
-    }
-
-    return resultado;
-}
+    return requisicao<RespostaProjetos>(
+        `/api/projetos?pagina=${pagina}&limite=10`,
+        {
+            token,
+            mensagemErro: "Erro ao listar os projetos."
+        }
+    );
+} 
 
 export async function consultarProjeto(
     token: string,
     id: number
 ): Promise<Projeto> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/projetos/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao consultar o projeto.");
-    }
+    const resultado = await requisicao<{ projeto: Projeto }> (
+        `/api/projetos/${id}`,
+        {
+            token,
+            mensagemErro: "Erro ao consultar o projeto."
+        }
+    );
 
     return resultado.projeto;
 }
@@ -670,82 +471,35 @@ export async function consultarProjeto(
 export async function cadastrarProjeto(
     token: string,
     dados: DadosNovoProjeto
-): Promise<{ mensagem: string }> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/projetos`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(dados)
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao cadastrar o projeto.");
-    }
-
-    return resultado;
+): Promise<RespostaMensagem> {
+    return requisicao<RespostaMensagem>("/api/projetos", {
+        metodo: "POST",
+        token,
+        dados,
+        mensagemErro: "Erro ao cadastrar o projeto."
+    });
 }
 
 export async function atualizarProjeto(
     token: string,
     id: number,
     dados: DadosProjeto
-): Promise<{ mensagem: string }> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/projetos/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(dados)
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao atualizar o projeto.");
-    }
-
-    return resultado;
+): Promise<RespostaMensagem> {
+    return requisicao<RespostaMensagem>(`/api/projetos/${id}`, {
+        metodo: "PUT",
+        token,
+        dados,
+        mensagemErro: "Erro ao atualizar o projeto."
+    });
 }
 
 export async function excluirProjeto(
     token: string,
     id: number
-): Promise<{ mensagem: string }> {
-    let resposta: Response;
-
-    try {
-        resposta = await fetch(`${API_URL}/api/projetos/${id}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    } catch {
-        throw new Error("Não foi possível conectar ao servidor.");
-    }
-
-    const resultado = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(resultado.mensagem || "Erro ao excluir o projeto.");
-    }
-
-    return resultado;
+): Promise<RespostaMensagem> {
+    return requisicao<RespostaMensagem>(`/api/projetos/${id}`, {
+        metodo: "DELETE",
+        token,
+        mensagemErro: "Erro ao excluir o projeto."
+    });
 }
