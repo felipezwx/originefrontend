@@ -96,7 +96,7 @@ async function salvarServico(evento: SubmitEvent<HTMLFormElement>) {
 if (id && servico?.id !== Number(id)) {
     return (
         <main className="pagina-servicos container py-4">
-            <Link to="/painel/servicos">Voltar aos serviços</Link>
+            <Link to="/painel/servicos" className="botao-voltar">Voltar aos serviços</Link>
             {erroConsulta ? (
                 <p role="alert" className="alert alert-danger">{erroConsulta}</p>
             ) : (
@@ -108,7 +108,7 @@ if (id && servico?.id !== Number(id)) {
 
     return (
         <main className="pagina-servicos container py-4">
-            <Link to="/painel/servicos">Voltar aos serviços</Link>
+            <Link to="/painel/servicos" className="botao-voltar">Voltar aos serviços</Link>
 
             <div className="cabecalho-servicos">
                 <h1>{id ? "Editar serviço" : "Novo serviço"}</h1>

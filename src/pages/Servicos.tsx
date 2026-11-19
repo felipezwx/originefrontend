@@ -85,7 +85,7 @@ export function Servicos() {
 
     return (
         <main className="pagina-servicos container py-4">
-            <Link to="/painel">Voltar ao início</Link>
+            <Link to="/painel" className="botao-voltar">Voltar ao início</Link>
             <div className="cabecalho-servicos">
                 <h1>Serviços</h1>
 

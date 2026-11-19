@@ -719,6 +719,48 @@ html {
     color: var(--branco);
 }
 
+a.botao-voltar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    background: #1b1b1b;
+    color: #dedede;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-decoration: none;
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+}
+
+a.botao-voltar:hover {
+    background: #29201f;
+    border-color: #b65b50;
+    color: #ffffff;
+}
+
+a.botao-voltar:focus-visible {
+    outline: 3px solid #ff9385;
+    outline-offset: 4px;
+}
+
+a.botao-voltar:active {
+    background: #352522;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    a.botao-voltar {
+        transition: none;
+    }
+}
+
 @media (max-width: 575px) {
     .pagina-orcamento > main.container {
         padding-inline: 16px;

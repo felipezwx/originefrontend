@@ -137,7 +137,7 @@ function CamposOrcamento({ id }: { id: string | undefined }) {
 
     return (
         <main className="pagina-servicos container py-4">
-            <Link to="/painel/orcamentos">Voltar aos orçamentos</Link>
+            <Link to="/painel/orcamentos" className="botao-voltar">Voltar aos orçamentos</Link>
 
             <div className="cabecalho-servicos">
                 <h1>{id ? "Editar orçamento" : "Novo orçamento"}</h1>

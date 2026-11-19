@@ -92,7 +92,7 @@ export function ProjetosAdmin() {
 
     return (
         <main className="pagina-servicos container py-4">
-            <Link to="/painel">Voltar ao painel</Link>
+            <Link to="/painel" className="botao-voltar">Voltar ao painel</Link>
 
             <div className="cabecalho-servicos">
                 <h1>Projetos finalizados</h1>

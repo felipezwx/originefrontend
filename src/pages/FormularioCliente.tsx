@@ -98,7 +98,7 @@ function CamposCliente({ id }: { id: string | undefined }) {
 
     return (
         <main className="pagina-servicos container py-4">
-            <Link to="/painel/clientes">Voltar aos clientes</Link>
+            <Link to="/painel/clientes" className="botao-voltar">Voltar aos clientes</Link>
 
             <div className="cabecalho-servicos">
                 <h1>{id ? "Editar cliente" : "Novo cliente"}</h1>

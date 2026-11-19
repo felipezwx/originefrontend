@@ -54,7 +54,7 @@ export function Catalogo() {
         <div className="pagina-originie">
             <Header />
             <main className="container py-5">
-                <Link to="/">Voltar ao início</Link>
+                <Link to="/" className="botao-voltar">Voltar ao início</Link>
                 <h1 className="titulo-secao my-4">Serviços</h1>
 
                 {carregando && <p role="status">Carregando serviços...</p>}

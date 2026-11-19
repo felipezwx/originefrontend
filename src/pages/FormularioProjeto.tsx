@@ -116,7 +116,7 @@ function CamposProjeto({ id }: { id: string | undefined }) {
 
     return (
         <main className="pagina-servicos container py-4">
-            <Link to="/painel/projetos">Voltar aos projetos</Link>
+            <Link to="/painel/projetos" className="botao-voltar">Voltar aos projetos</Link>
 
             <div className="cabecalho-servicos">
                 <h1>{id ? "Editar projeto" : "Finalizar projeto"}</h1>
