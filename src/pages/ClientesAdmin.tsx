@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { excluirCliente, listarClientes, type Cliente } from "../services/api";
+import { Paginacao } from "../components/Paginacao";
 import "../styles/servicos.css";
 
 export function ClientesAdmin() {
@@ -148,32 +149,16 @@ export function ClientesAdmin() {
                 </>
             )}
 
-            {!erro && totalPaginas > 1 && (
-                <nav
-                    aria-label="Paginação de clientes"
-                    className="d-flex align-items-center gap-3 mt-3"
-                >
-                    <button
-                        type="button"
-                        className="btn btn-outline-secondary"
-                        disabled={carregando || excluindo || pagina === 1}
-                        onClick={() => mudarPagina(pagina - 1)}
-                    >
-                        Anterior
-                    </button>
-
-                    <span>Página {pagina} de {totalPaginas}</span>
-
-                    <button
-                        type="button"
-                        className="btn btn-outline-secondary"
-                        disabled={carregando || excluindo || pagina >= totalPaginas}
-                        onClick={() => mudarPagina(pagina + 1)}
-                    >
-                        Próxima
-                    </button>
-                </nav>
+            {!erro && (
+                <Paginacao
+                    pagina={pagina}
+                    totalPaginas={totalPaginas}
+                    bloqueada={carregando || excluindo}
+                    descricao="Paginação de clientes"
+                    aoMudarPagina={mudarPagina}
+                />
             )}
+
         </main>
     );
 }

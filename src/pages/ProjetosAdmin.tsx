@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { excluirProjeto, listarProjetos, type Projeto } from "../services/api";
+import { Paginacao } from "../components/Paginacao";
 import "../styles/servicos.css";
 
 const moeda = new Intl.NumberFormat("pt-BR", {
@@ -164,32 +165,16 @@ export function ProjetosAdmin() {
                 </>
             )}
 
-            {!erro && totalPaginas > 1 && (
-                <nav
-                    aria-label="Paginação de projetos"
-                    className="d-flex align-items-center gap-3 mt-3"
-                >
-                    <button
-                        type="button"
-                        className="btn btn-outline-secondary"
-                        disabled={carregando || excluindo || pagina === 1}
-                        onClick={() => mudarPagina(pagina - 1)}
-                    >
-                        Anterior
-                    </button>
-
-                    <span>Página {pagina} de {totalPaginas}</span>
-
-                    <button
-                        type="button"
-                        className="btn btn-outline-secondary"
-                        disabled={carregando || excluindo || pagina >= totalPaginas}
-                        onClick={() => mudarPagina(pagina + 1)}
-                    >
-                        Próxima
-                    </button>
-                </nav>
+            {!erro && (
+                <Paginacao
+                    pagina={pagina}
+                    totalPaginas={totalPaginas}
+                    bloqueada={carregando || excluindo}
+                    descricao="Paginação de projetos"
+                    aoMudarPagina={mudarPagina}
+                />
             )}
+            
         </main>
     );
 }
